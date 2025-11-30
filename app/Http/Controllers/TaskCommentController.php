@@ -65,11 +65,12 @@ class TaskCommentController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Comment data',
             content: new OA\JsonContent(
-                required: ['comment_text', 'author'],
-                properties: [
-                    new OA\Property(property: 'comment_text', type: 'string', example: 'This looks great! Let\'s proceed with this design.'),
-                    new OA\Property(property: 'author', type: 'string', example: 'John Doe'),
+                ref: '#/components/schemas/StoreCommentRequest',
+                example: [
+                    'comment_text' => 'This implementation looks solid. We should test it thoroughly before deployment.',
+                    'author' => 'Jane Smith',
                 ]
             )
         ),

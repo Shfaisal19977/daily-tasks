@@ -45,14 +45,15 @@ class ProjectController extends Controller
         tags: ['Projects'],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Project data',
             content: new OA\JsonContent(
-                required: ['name'],
-                properties: [
-                    new OA\Property(property: 'name', type: 'string', example: 'Website Redesign'),
-                    new OA\Property(property: 'description', type: 'string', example: 'Complete redesign of company website'),
-                    new OA\Property(property: 'start_date', type: 'string', format: 'date', example: '2025-01-01'),
-                    new OA\Property(property: 'end_date', type: 'string', format: 'date', example: '2025-03-31'),
-                    new OA\Property(property: 'status', type: 'string', example: 'planned'),
+                ref: '#/components/schemas/StoreProjectRequest',
+                example: [
+                    'name' => 'Mobile App Development',
+                    'description' => 'Develop a cross-platform mobile application for iOS and Android',
+                    'start_date' => '2025-02-01',
+                    'end_date' => '2025-08-31',
+                    'status' => 'planned',
                 ]
             )
         ),
@@ -60,9 +61,30 @@ class ProjectController extends Controller
             new OA\Response(
                 response: 201,
                 description: 'Project created successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/Project')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Project',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Mobile App Development',
+                        'description' => 'Develop a cross-platform mobile application',
+                        'start_date' => '2025-02-01',
+                        'end_date' => '2025-08-31',
+                        'status' => 'planned',
+                        'created_at' => '2025-01-15T10:00:00.000000Z',
+                        'updated_at' => '2025-01-15T10:00:00.000000Z',
+                    ]
+                )
             ),
-            new OA\Response(response: 422, description: 'Validation error'),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The name field is required.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['name' => ['The name field is required.']]),
+                    ]
+                )
+            ),
         ]
     )]
     public function store(StoreProjectRequest $request): JsonResponse

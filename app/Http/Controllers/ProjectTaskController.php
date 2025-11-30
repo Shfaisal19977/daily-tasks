@@ -64,14 +64,15 @@ class ProjectTaskController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Task data',
             content: new OA\JsonContent(
-                required: ['title', 'status', 'priority'],
-                properties: [
-                    new OA\Property(property: 'title', type: 'string', example: 'Design Homepage'),
-                    new OA\Property(property: 'details', type: 'string', example: 'Create new homepage design mockup'),
-                    new OA\Property(property: 'status', type: 'string', example: 'in_progress'),
-                    new OA\Property(property: 'priority', type: 'string', example: 'high'),
-                    new OA\Property(property: 'due_date', type: 'string', format: 'date', example: '2025-01-15'),
+                ref: '#/components/schemas/StoreTaskRequest',
+                example: [
+                    'title' => 'Implement User Authentication',
+                    'details' => 'Implement JWT-based authentication with refresh tokens and password reset functionality',
+                    'status' => 'in_progress',
+                    'priority' => 'high',
+                    'due_date' => '2025-02-15',
                 ]
             )
         ),

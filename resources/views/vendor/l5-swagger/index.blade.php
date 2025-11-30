@@ -27,14 +27,27 @@
     </style>
     @if(config('l5-swagger.defaults.ui.display.dark_mode'))
         <style>
+            /* Enhanced Dark Mode with Better Colors */
             body#dark-mode,
             #dark-mode .scheme-container {
-                background: #1b1b1b;
+                background: #0f172a;
             }
+            
+            #dark-mode .swagger-ui {
+                background: #0f172a;
+            }
+            
+            #dark-mode .topbar {
+                background: #1e293b;
+                border-bottom: 1px solid #334155;
+            }
+            
             #dark-mode .scheme-container,
             #dark-mode .opblock .opblock-section-header{
-                box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.15);
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+                background: #1e293b;
             }
+            
             #dark-mode .operation-filter-input,
             #dark-mode .dialog-ux .modal-ux,
             #dark-mode input[type=email],
@@ -42,10 +55,21 @@
             #dark-mode input[type=password],
             #dark-mode input[type=search],
             #dark-mode input[type=text],
-            #dark-mode textarea{
-                background: #343434;
-                color: #e7e7e7;
+            #dark-mode textarea,
+            #dark-mode select {
+                background: #1e293b;
+                color: #e2e8f0;
+                border: 1px solid #334155;
             }
+            
+            #dark-mode .operation-filter-input:focus,
+            #dark-mode input[type=text]:focus,
+            #dark-mode textarea:focus {
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                outline: none;
+            }
+            
             #dark-mode .title,
             #dark-mode li,
             #dark-mode p,
@@ -66,51 +90,213 @@
             #dark-mode .parameter__type,
             #dark-mode .prop-format,
             #dark-mode .loading-container .loading:after{
-                color: #e7e7e7;
+                color: #e2e8f0;
             }
+            
             #dark-mode .opblock-description-wrapper p,
             #dark-mode .opblock-external-docs-wrapper p,
             #dark-mode .opblock-title_normal p,
             #dark-mode .response-col_status,
             #dark-mode table thead tr td,
             #dark-mode table thead tr th,
-            #dark-mode .response-col_links,
-            #dark-mode .swagger-ui{
-                color: wheat;
+            #dark-mode .response-col_links{
+                color: #cbd5e1;
             }
+            
             #dark-mode .parameter__extension,
             #dark-mode .parameter__in,
             #dark-mode .model-title{
-                color: #949494;
+                color: #94a3b8;
             }
+            
             #dark-mode table thead tr td,
             #dark-mode table thead tr th{
-                border-color: rgba(120,120,120,.2);
+                border-color: #334155;
+                background: #1e293b;
             }
+            
             #dark-mode .opblock .opblock-section-header{
-                background: transparent;
+                background: #1e293b;
+                border-bottom: 1px solid #334155;
             }
+            
+            /* Enhanced HTTP Method Colors - More Vibrant */
             #dark-mode .opblock.opblock-post{
-                background: rgba(73,204,144,.25);
+                background: rgba(34, 197, 94, 0.12);
+                border-left: 4px solid #22c55e;
             }
+            
             #dark-mode .opblock.opblock-get{
-                background: rgba(97,175,254,.25);
+                background: rgba(59, 130, 246, 0.12);
+                border-left: 4px solid #3b82f6;
             }
+            
             #dark-mode .opblock.opblock-put{
-                background: rgba(252,161,48,.25);
+                background: rgba(251, 191, 36, 0.12);
+                border-left: 4px solid #fbbf24;
             }
+            
+            #dark-mode .opblock.opblock-patch{
+                background: rgba(251, 191, 36, 0.12);
+                border-left: 4px solid #fbbf24;
+            }
+            
             #dark-mode .opblock.opblock-delete{
-                background: rgba(249,62,62,.25);
+                background: rgba(239, 68, 68, 0.12);
+                border-left: 4px solid #ef4444;
             }
+            
+            #dark-mode .opblock-summary {
+                border-color: #334155;
+            }
+            
+            #dark-mode .opblock-summary:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            
+            #dark-mode .opblock-summary-method {
+                font-weight: 600;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            }
+            
+            #dark-mode .opblock-summary-method.opblock-post {
+                background: #22c55e;
+                color: #fff;
+            }
+            
+            #dark-mode .opblock-summary-method.opblock-get {
+                background: #3b82f6;
+                color: #fff;
+            }
+            
+            #dark-mode .opblock-summary-method.opblock-put {
+                background: #fbbf24;
+                color: #1e293b;
+            }
+            
+            #dark-mode .opblock-summary-method.opblock-patch {
+                background: #fbbf24;
+                color: #1e293b;
+            }
+            
+            #dark-mode .opblock-summary-method.opblock-delete {
+                background: #ef4444;
+                color: #fff;
+            }
+            
+            #dark-mode .btn.execute {
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                color: #fff;
+                border: none;
+                box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+            }
+            
+            #dark-mode .btn.execute:hover {
+                background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+            }
+            
+            #dark-mode .btn.cancel {
+                background: #475569;
+                color: #fff;
+                border: none;
+            }
+            
+            #dark-mode .btn.cancel:hover {
+                background: #64748b;
+            }
+            
+            #dark-mode .response-col_status {
+                font-weight: 600;
+            }
+            
+            #dark-mode .response-col_status[data-code="200"],
+            #dark-mode .response-col_status[data-code="201"] {
+                color: #22c55e;
+            }
+            
+            #dark-mode .response-col_status[data-code="404"],
+            #dark-mode .response-col_status[data-code="422"],
+            #dark-mode .response-col_status[data-code="500"] {
+                color: #ef4444;
+            }
+            
             #dark-mode .loading-container .loading:before{
-                border-color: rgba(255,255,255,10%);
-                border-top-color: rgba(255,255,255,.6);
+                border-color: rgba(59, 130, 246, 0.3);
+                border-top-color: #3b82f6;
             }
+            
             #dark-mode svg:not(:root){
-                fill: #e7e7e7;
+                fill: #cbd5e1;
             }
+            
             #dark-mode .opblock-summary-description {
-                color: #fafafa;
+                color: #94a3b8;
+            }
+            
+            #dark-mode .info {
+                background: #1e293b;
+                border: 1px solid #334155;
+            }
+            
+            #dark-mode .info .title {
+                color: #3b82f6;
+            }
+            
+            #dark-mode .model-box {
+                background: #1e293b;
+                border: 1px solid #334155;
+            }
+            
+            #dark-mode .model-title {
+                color: #3b82f6;
+            }
+            
+            #dark-mode code {
+                background: #0f172a;
+                color: #fbbf24;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-weight: 500;
+            }
+            
+            #dark-mode pre {
+                background: #0f172a;
+                border: 1px solid #334155;
+            }
+            
+            #dark-mode .highlight-code {
+                background: #1e293b;
+            }
+            
+            #dark-mode .response-content-type {
+                color: #94a3b8;
+            }
+            
+            #dark-mode .tab li {
+                border-bottom: 2px solid transparent;
+            }
+            
+            #dark-mode .tab li.active {
+                border-bottom-color: #3b82f6;
+                color: #3b82f6;
+            }
+            
+            #dark-mode .tab li button {
+                color: #cbd5e1;
+            }
+            
+            #dark-mode .tab li.active button {
+                color: #3b82f6;
+            }
+            
+            #dark-mode .opblock-tag {
+                color: #e2e8f0;
+                border-bottom: 1px solid #334155;
+            }
+            
+            #dark-mode .opblock-tag:hover {
+                background: rgba(255, 255, 255, 0.03);
             }
         </style>
     @endif

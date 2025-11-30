@@ -71,12 +71,13 @@ class BookController extends Controller
         tags: ['Books'],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Book data',
             content: new OA\JsonContent(
-                required: ['title', 'author', 'publication_year'],
-                properties: [
-                    new OA\Property(property: 'title', type: 'string', example: 'The Great Gatsby'),
-                    new OA\Property(property: 'author', type: 'string', example: 'F. Scott Fitzgerald'),
-                    new OA\Property(property: 'publication_year', type: 'integer', example: 1925),
+                ref: '#/components/schemas/StoreBookRequest',
+                example: [
+                    'title' => 'Laravel: The Complete Guide',
+                    'author' => 'Taylor Otwell',
+                    'publication_year' => 2024,
                 ]
             )
         ),

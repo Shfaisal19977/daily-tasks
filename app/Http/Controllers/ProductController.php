@@ -42,16 +42,18 @@ class ProductController extends Controller
     #[OA\Post(
         path: '/api/products',
         summary: 'Create a new product',
+        description: 'Creates a new product with name, price, quantity, and optional description. All fields are validated before creation.',
         tags: ['Products'],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Product data',
             content: new OA\JsonContent(
-                required: ['name', 'price', 'quantity'],
-                properties: [
-                    new OA\Property(property: 'name', type: 'string', example: 'Laptop Stand'),
-                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 49.99),
-                    new OA\Property(property: 'quantity', type: 'integer', example: 100),
-                    new OA\Property(property: 'description', type: 'string', example: 'Adjustable aluminum laptop stand'),
+                ref: '#/components/schemas/StoreProductRequest',
+                example: [
+                    'name' => 'Wireless Mouse',
+                    'price' => 29.99,
+                    'quantity' => 50,
+                    'description' => 'Ergonomic wireless mouse with 2.4GHz connectivity',
                 ]
             )
         ),
@@ -59,9 +61,29 @@ class ProductController extends Controller
             new OA\Response(
                 response: 201,
                 description: 'Product created successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/Product')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Product',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Wireless Mouse',
+                        'price' => '29.99',
+                        'quantity' => 50,
+                        'description' => 'Ergonomic wireless mouse with 2.4GHz connectivity',
+                        'created_at' => '2025-11-30T18:00:00.000000Z',
+                        'updated_at' => '2025-11-30T18:00:00.000000Z',
+                    ]
+                )
             ),
-            new OA\Response(response: 422, description: 'Validation error'),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The name field is required.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['name' => ['The name field is required.']]),
+                    ]
+                )
+            ),
         ]
     )]
     public function store(StoreProductRequest $request): JsonResponse
@@ -74,6 +96,7 @@ class ProductController extends Controller
     #[OA\Get(
         path: '/api/products/{product}',
         summary: 'Get a single product',
+        description: 'Retrieves detailed information about a specific product by ID',
         tags: ['Products'],
         parameters: [
             new OA\Parameter(
@@ -81,16 +104,36 @@ class ProductController extends Controller
                 in: 'path',
                 required: true,
                 description: 'Product ID',
-                schema: new OA\Schema(type: 'integer')
+                schema: new OA\Schema(type: 'integer'),
+                example: 1
             ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Product details',
-                content: new OA\JsonContent(ref: '#/components/schemas/Product')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Product',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Wireless Mouse',
+                        'price' => '29.99',
+                        'quantity' => 50,
+                        'description' => 'Ergonomic wireless mouse with 2.4GHz connectivity',
+                        'created_at' => '2025-11-30T18:00:00.000000Z',
+                        'updated_at' => '2025-11-30T18:00:00.000000Z',
+                    ]
+                )
             ),
-            new OA\Response(response: 404, description: 'Product not found'),
+            new OA\Response(
+                response: 404,
+                description: 'Product not found',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'No query results for model [App\\Models\\Product] 999'),
+                    ]
+                )
+            ),
         ]
     )]
     public function show(Product $product): JsonResponse
@@ -113,12 +156,13 @@ class ProductController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Product data to update',
             content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'name', type: 'string', example: 'Laptop Stand'),
-                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 49.99),
-                    new OA\Property(property: 'quantity', type: 'integer', example: 100),
-                    new OA\Property(property: 'description', type: 'string', example: 'Adjustable aluminum laptop stand'),
+                ref: '#/components/schemas/UpdateProductRequest',
+                example: [
+                    'name' => 'Wireless Mouse Pro',
+                    'price' => 34.99,
+                    'quantity' => 75,
                 ]
             )
         ),
@@ -126,10 +170,38 @@ class ProductController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Product updated successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/Product')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Product',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Wireless Mouse Pro',
+                        'price' => '34.99',
+                        'quantity' => 75,
+                        'description' => 'Updated ergonomic wireless mouse',
+                        'created_at' => '2025-11-30T18:00:00.000000Z',
+                        'updated_at' => '2025-12-01T10:30:00.000000Z',
+                    ]
+                )
             ),
-            new OA\Response(response: 404, description: 'Product not found'),
-            new OA\Response(response: 422, description: 'Validation error'),
+            new OA\Response(
+                response: 404,
+                description: 'Product not found',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'No query results for model [App\\Models\\Product] 999'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The price must be a number.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['price' => ['The price must be a number.']]),
+                    ]
+                )
+            ),
         ]
     )]
     #[OA\Patch(
@@ -147,12 +219,13 @@ class ProductController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Product data to update',
             content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'name', type: 'string', example: 'Laptop Stand'),
-                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 49.99),
-                    new OA\Property(property: 'quantity', type: 'integer', example: 100),
-                    new OA\Property(property: 'description', type: 'string', example: 'Adjustable aluminum laptop stand'),
+                ref: '#/components/schemas/UpdateProductRequest',
+                example: [
+                    'name' => 'Wireless Mouse Pro',
+                    'price' => 34.99,
+                    'quantity' => 75,
                 ]
             )
         ),
@@ -160,10 +233,38 @@ class ProductController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Product updated successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/Product')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Product',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Wireless Mouse Pro',
+                        'price' => '34.99',
+                        'quantity' => 75,
+                        'description' => 'Updated ergonomic wireless mouse',
+                        'created_at' => '2025-11-30T18:00:00.000000Z',
+                        'updated_at' => '2025-12-01T10:30:00.000000Z',
+                    ]
+                )
             ),
-            new OA\Response(response: 404, description: 'Product not found'),
-            new OA\Response(response: 422, description: 'Validation error'),
+            new OA\Response(
+                response: 404,
+                description: 'Product not found',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'No query results for model [App\\Models\\Product] 999'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The price must be a number.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['price' => ['The price must be a number.']]),
+                    ]
+                )
+            ),
         ]
     )]
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
@@ -221,10 +322,11 @@ class ProductController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
+            description: 'Stock reduction data',
             content: new OA\JsonContent(
-                required: ['amount'],
-                properties: [
-                    new OA\Property(property: 'amount', type: 'integer', example: 5, description: 'Amount to reduce from stock'),
+                ref: '#/components/schemas/ReduceStockRequest',
+                example: [
+                    'amount' => 5,
                 ]
             )
         ),
@@ -232,7 +334,18 @@ class ProductController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Stock reduced successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/Product')
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Product',
+                    example: [
+                        'id' => 1,
+                        'name' => 'Wireless Mouse',
+                        'price' => '29.99',
+                        'quantity' => 45,
+                        'description' => 'Ergonomic wireless mouse',
+                        'created_at' => '2025-11-30T18:00:00.000000Z',
+                        'updated_at' => '2025-12-01T11:00:00.000000Z',
+                    ]
+                )
             ),
             new OA\Response(
                 response: 422,
@@ -243,7 +356,15 @@ class ProductController extends Controller
                     ]
                 )
             ),
-            new OA\Response(response: 404, description: 'Product not found'),
+            new OA\Response(
+                response: 404,
+                description: 'Product not found',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'No query results for model [App\\Models\\Product] 999'),
+                    ]
+                )
+            ),
         ]
     )]
     public function reduceStock(ReduceStockRequest $request, Product $product): JsonResponse
