@@ -39,6 +39,15 @@ Build a project management API system with the following features:
 - Delete books
 - Books include: title, author, and publication year (4-digit validation)
 
+### Products
+- List all products
+- Get a single product by ID
+- Create new products with validation
+- Update existing products
+- Delete products
+- Reduce product stock quantity
+- Products include: name, price, quantity, and description
+
 ## API Endpoints
 
 ### Projects
@@ -67,6 +76,15 @@ Build a project management API system with the following features:
 - `PUT /api/books/{book}` - Update a book
 - `PATCH /api/books/{book}` - Update a book (partial)
 - `DELETE /api/books/{book}` - Delete a book
+
+### Products
+- `GET /api/products` - List all products
+- `POST /api/products` - Create a new product
+- `GET /api/products/{product}` - Get a single product by ID
+- `PUT /api/products/{product}` - Update a product
+- `PATCH /api/products/{product}` - Update a product (partial)
+- `DELETE /api/products/{product}` - Delete a product
+- `POST /api/products/{product}/reduce-stock` - Reduce product stock by amount
 
 ## Technology Stack
 
@@ -108,11 +126,37 @@ php artisan test
 
 ## Project Structure
 
-- `app/Models/` - Eloquent models (Project, Task, Comment, Book)
-- `app/Http/Controllers/` - API controllers (ProjectController, BookController, etc.)
+- `app/Models/` - Eloquent models (Project, Task, Comment, Book, Product)
+- `app/Http/Controllers/` - API controllers (ProjectController, BookController, ProductController, etc.)
 - `app/Http/Requests/` - Form request validation classes
 - `database/migrations/` - Database schema migrations
 - `database/factories/` - Model factories for testing
 - `routes/api.php` - API route definitions
 - `tests/` - Pest test files
+
+## Product API Details
+
+### Validation Rules
+
+**Create Product (StoreProductRequest):**
+- `name`: required, string, max 255 characters
+- `price`: required, numeric, minimum 0
+- `quantity`: required, integer, minimum 0
+- `description`: optional, string
+
+**Update Product (UpdateProductRequest):**
+- Same rules as create, but all fields use `sometimes` for partial updates
+
+### Reduce Stock Endpoint
+
+The `POST /api/products/{product}/reduce-stock` endpoint accepts:
+```json
+{
+  "amount": 3
+}
+```
+
+- Validates that `amount` is required, integer, and minimum 1
+- Returns 422 error if insufficient stock is available
+- Returns updated product on success
 

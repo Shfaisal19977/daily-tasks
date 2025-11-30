@@ -24,8 +24,8 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'details' => ['nullable', 'string'],
-            'status' => ['nullable', 'string', 'max:50'],
-            'priority' => ['nullable', 'string', 'max:50'],
+            'status' => ['required', 'string', 'max:50'],
+            'priority' => ['required', 'string', 'max:50'],
             'due_date' => ['nullable', 'date'],
         ];
     }
