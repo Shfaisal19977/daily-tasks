@@ -119,9 +119,9 @@ The system follows a hierarchical structure where:
    ```
 6. **Access the application**
    
-   Since you're using Laravel Herd, the application is automatically available at:
-   ```
-   http://laravel1.test
+   if you're you're using Laravel Herd, the application is automatically available at: her http:...
+
+
    ```
    
    (If using `php artisan serve` instead, it will be at `http://localhost:8000`)
