@@ -134,24 +134,12 @@ php artisan test
 - `routes/api.php` - API route definitions
 - `tests/` - Pest test files
 
-## Product API Details
 
-### Validation Rules
-
-**Create Product (StoreProductRequest):**
-- `name`: required, string, max 255 characters
-- `price`: required, numeric, minimum 0
-- `quantity`: required, integer, minimum 0
-- `description`: optional, string
-
-**Update Product (UpdateProductRequest):**
-- Same rules as create, but all fields use `sometimes` for partial updates
 
 **Reduce Stock (ReduceStockRequest):**
 - `amount`: required, integer, minimum 1
 
 ### Reduce Stock Endpoint
-
 The `POST /api/products/{product}/reduce-stock` endpoint allows you to reduce the product's stock quantity.
 
 
