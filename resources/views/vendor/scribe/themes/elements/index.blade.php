@@ -14,10 +14,114 @@
 
     <link rel="stylesheet" href="{!! $assetPathPrefix !!}css/theme-elements.style.css" media="screen">
 
+    <style>
+        /* Dark Theme Overrides */
+        :root {
+            --color-bg: #0f172a;
+            --color-bg-secondary: #1e293b;
+            --color-bg-tertiary: #334155;
+            --color-text: #e2e8f0;
+            --color-text-muted: #94a3b8;
+            --color-border: #334155;
+            --color-primary: #3b82f6;
+            --color-primary-hover: #2563eb;
+        }
+
+        /* Base dark theme */
+        body, html {
+            background-color: var(--color-bg) !important;
+            color: var(--color-text) !important;
+        }
+
+        /* All text elements */
+        body *,
+        p, span, div, li, td, th,
+        h1, h2, h3, h4, h5, h6,
+        .sl-text-heading,
+        .sl-text-body,
+        .sl-text-muted,
+        .sl-prose,
+        .sl-prose * {
+            color: var(--color-text) !important;
+        }
+
+        /* Muted text */
+        .sl-text-muted,
+        small,
+        .sl-text-muted * {
+            color: var(--color-text-muted) !important;
+        }
+
+        /* Backgrounds */
+        .sl-bg-canvas,
+        .sl-bg-canvas-100,
+        .sl-bg-canvas-200,
+        .sl-card,
+        .sl-card * {
+            background-color: var(--color-bg-secondary) !important;
+        }
+
+        /* Borders */
+        .sl-border,
+        .sl-card,
+        border,
+        [class*="border"] {
+            border-color: var(--color-border) !important;
+        }
+
+        /* Links */
+        a,
+        .sl-prose a {
+            color: var(--color-primary) !important;
+        }
+
+        a:hover,
+        .sl-prose a:hover {
+            color: var(--color-primary-hover) !important;
+        }
+
+        /* Code blocks */
+        code,
+        pre,
+        .sl-prose code,
+        .sl-prose pre {
+            background-color: var(--color-bg-tertiary) !important;
+            color: var(--color-text) !important;
+        }
+
+        /* Form elements */
+        input,
+        textarea,
+        select,
+        button {
+            background-color: var(--color-bg-secondary) !important;
+            color: var(--color-text) !important;
+            border-color: var(--color-border) !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--color-text-muted) !important;
+        }
+
+        /* Primary buttons */
+        .sl-bg-primary,
+        button[type="submit"],
+        .sl-button-primary {
+            background-color: var(--color-primary) !important;
+            color: white !important;
+        }
+
+        .sl-bg-primary:hover,
+        button[type="submit"]:hover {
+            background-color: var(--color-primary-hover) !important;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
     <link rel="stylesheet"
-          href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/docco.min.css">
+          href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/nord.min.css">
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
     <script type="module">

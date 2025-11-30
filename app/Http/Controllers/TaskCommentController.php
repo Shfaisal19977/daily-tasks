@@ -8,20 +8,39 @@ use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use OpenApi\Attributes as OA;
 
-/**
- * @group Comments
- */
+#[OA\Tag(
+    name: 'Comments',
+    description: 'Comment management endpoints on tasks'
+)]
 class TaskCommentController extends Controller
 {
-    /**
-     * Get all comments for a task
-     *
-     * @urlParam task integer required The ID of the task. Example: 1
-     *
-     * @response 200 [{"id": 1, "task_id": 1, "comment_text": "This looks great!", "author": "John Doe", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}]
-     * @response 404 {"message": "No query results for model [App\\Models\\Task] 1"}
-     */
+    #[OA\Get(
+        path: '/api/tasks/{task}/comments',
+        summary: 'Get all comments for a specific task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of comments',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Comment')
+                )
+            ),
+            new OA\Response(response: 404, description: 'Task not found'),
+        ]
+    )]
     public function index(Task $task): JsonResponse
     {
         $comments = $task->comments()
@@ -31,18 +50,39 @@ class TaskCommentController extends Controller
         return response()->json($comments);
     }
 
-    /**
-     * Create a new comment on a task
-     *
-     * @urlParam task integer required The ID of the task. Example: 1
-     *
-     * @bodyParam comment_text string required The comment text. Example: This looks great! Let's proceed with this design.
-     * @bodyParam author string required The comment author. Example: John Doe
-     *
-     * @response 201 {"id": 1, "task_id": 1, "comment_text": "This looks great!", "author": "John Doe", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Task] 1"}
-     * @response 422 {"message": "The comment_text field is required."}
-     */
+    #[OA\Post(
+        path: '/api/tasks/{task}/comments',
+        summary: 'Create a new comment on a task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['comment_text', 'author'],
+                properties: [
+                    new OA\Property(property: 'comment_text', type: 'string', example: 'This looks great! Let\'s proceed with this design.'),
+                    new OA\Property(property: 'author', type: 'string', example: 'John Doe'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Comment created successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Comment')
+            ),
+            new OA\Response(response: 404, description: 'Task not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function store(StoreCommentRequest $request, Task $task): JsonResponse
     {
         $comment = $task->comments()->create($request->validated());
@@ -50,19 +90,84 @@ class TaskCommentController extends Controller
         return response()->json($comment, 201);
     }
 
-    /**
-     * Update a comment
-     *
-     * @urlParam task integer required The ID of the task. Example: 1
-     * @urlParam comment integer required The ID of the comment. Example: 1
-     *
-     * @bodyParam comment_text string The comment text. Example: This looks great! Let's proceed with this design.
-     * @bodyParam author string The comment author. Example: John Doe
-     *
-     * @response 200 {"id": 1, "task_id": 1, "comment_text": "This looks great!", "author": "John Doe", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "Not Found"}
-     * @response 422 {"message": "The comment_text must be a string."}
-     */
+    #[OA\Put(
+        path: '/api/tasks/{task}/comments/{comment}',
+        summary: 'Update a comment on a task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'comment',
+                in: 'path',
+                required: true,
+                description: 'Comment ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'comment_text', type: 'string', example: 'This looks great! Let\'s proceed with this design.'),
+                    new OA\Property(property: 'author', type: 'string', example: 'John Doe'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Comment updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Comment')
+            ),
+            new OA\Response(response: 404, description: 'Task or Comment not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
+    #[OA\Patch(
+        path: '/api/tasks/{task}/comments/{comment}',
+        summary: 'Partially update a comment on a task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'comment',
+                in: 'path',
+                required: true,
+                description: 'Comment ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'comment_text', type: 'string', example: 'This looks great! Let\'s proceed with this design.'),
+                    new OA\Property(property: 'author', type: 'string', example: 'John Doe'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Comment updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Comment')
+            ),
+            new OA\Response(response: 404, description: 'Task or Comment not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function update(UpdateCommentRequest $request, Task $task, Comment $comment): JsonResponse
     {
         abort_if($comment->task_id !== $task->id, 404);
@@ -72,15 +177,34 @@ class TaskCommentController extends Controller
         return response()->json($comment);
     }
 
-    /**
-     * Delete a comment
-     *
-     * @urlParam task integer required The ID of the task. Example: 1
-     * @urlParam comment integer required The ID of the comment. Example: 1
-     *
-     * @response 204
-     * @response 404 {"message": "Not Found"}
-     */
+    #[OA\Delete(
+        path: '/api/tasks/{task}/comments/{comment}',
+        summary: 'Delete a comment from a task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'comment',
+                in: 'path',
+                required: true,
+                description: 'Comment ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Comment deleted successfully'
+            ),
+            new OA\Response(response: 404, description: 'Task or Comment not found'),
+        ]
+    )]
     public function destroy(Task $task, Comment $comment): Response
     {
         abort_if($comment->task_id !== $task->id, 404);

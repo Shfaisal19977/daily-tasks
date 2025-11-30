@@ -128,24 +128,24 @@ The system follows a hierarchical structure where:
 
 ## API Documentation
 
-This API includes interactive API documentation powered by Scribe. Visit:
+This API includes interactive Swagger/OpenAPI documentation with dark mode. Visit:
 
-**API Documentation**: `http://laravel1.test/docs`
+**Swagger UI**: `http://laravel1.test/api/documentation`
 
-(If using `php artisan serve`, use `http://localhost:8000/docs`)
+(If using `php artisan serve`, use `http://localhost:8000/api/documentation`)
 
 The documentation provides:
+- Modern dark mode UI
 - Interactive API testing interface
 - Complete endpoint documentation with examples
 - Request/response schemas
 - Try-it-out functionality
 - Code samples in multiple languages
-- Postman collection and OpenAPI spec downloads
 
 To regenerate the documentation after making changes:
 
 ```bash
-php artisan scribe:generate
+php artisan l5-swagger:generate
 ```
 
 ## Testing

@@ -6,17 +6,29 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as OA;
 
-/**
- * @group Projects
- */
+#[OA\Tag(
+    name: 'Projects',
+    description: 'Project management endpoints'
+)]
 class ProjectController extends Controller
 {
-    /**
-     * Get all projects
-     *
-     * @response 200 [{"id": 1, "name": "Website Redesign", "description": "Complete redesign", "start_date": "2025-01-01", "end_date": "2025-03-31", "status": "planned", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z", "tasks": []}]
-     */
+    #[OA\Get(
+        path: '/api/projects',
+        summary: 'Get all projects',
+        tags: ['Projects'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of projects',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Project')
+                )
+            ),
+        ]
+    )]
     public function index(): JsonResponse
     {
         $projects = Project::query()
@@ -27,18 +39,32 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
-    /**
-     * Create a new project
-     *
-     * @bodyParam name string required The project name. Example: Website Redesign
-     * @bodyParam description string The project description. Example: Complete redesign of company website
-     * @bodyParam start_date date The project start date. Example: 2025-01-01
-     * @bodyParam end_date date The project end date. Example: 2025-03-31
-     * @bodyParam status string The project status. Example: planned
-     *
-     * @response 201 {"id": 1, "name": "Website Redesign", "description": "Complete redesign", "start_date": "2025-01-01", "end_date": "2025-03-31", "status": "planned", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 422 {"message": "The name field is required."}
-     */
+    #[OA\Post(
+        path: '/api/projects',
+        summary: 'Create a new project',
+        tags: ['Projects'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['name'],
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'Website Redesign'),
+                    new OA\Property(property: 'description', type: 'string', example: 'Complete redesign of company website'),
+                    new OA\Property(property: 'start_date', type: 'string', format: 'date', example: '2025-01-01'),
+                    new OA\Property(property: 'end_date', type: 'string', format: 'date', example: '2025-03-31'),
+                    new OA\Property(property: 'status', type: 'string', example: 'planned'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Project created successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Project')
+            ),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function store(StoreProjectRequest $request): JsonResponse
     {
         $project = Project::query()->create($request->validated());
@@ -46,21 +72,76 @@ class ProjectController extends Controller
         return response()->json($project, 201);
     }
 
-    /**
-     * Update a project
-     *
-     * @urlParam project integer required The ID of the project. Example: 1
-     *
-     * @bodyParam name string The project name. Example: Website Redesign
-     * @bodyParam description string The project description. Example: Complete redesign of company website
-     * @bodyParam start_date date The project start date. Example: 2025-01-01
-     * @bodyParam end_date date The project end date. Example: 2025-03-31
-     * @bodyParam status string The project status. Example: planned
-     *
-     * @response 200 {"id": 1, "name": "Website Redesign", "description": "Complete redesign", "start_date": "2025-01-01", "end_date": "2025-03-31", "status": "planned", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Project] 1"}
-     * @response 422 {"message": "The name must be a string."}
-     */
+    #[OA\Put(
+        path: '/api/projects/{project}',
+        summary: 'Update a project',
+        tags: ['Projects'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'Website Redesign'),
+                    new OA\Property(property: 'description', type: 'string', example: 'Complete redesign of company website'),
+                    new OA\Property(property: 'start_date', type: 'string', format: 'date', example: '2025-01-01'),
+                    new OA\Property(property: 'end_date', type: 'string', format: 'date', example: '2025-03-31'),
+                    new OA\Property(property: 'status', type: 'string', example: 'planned'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Project updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Project')
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
+    #[OA\Patch(
+        path: '/api/projects/{project}',
+        summary: 'Partially update a project',
+        tags: ['Projects'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'Website Redesign'),
+                    new OA\Property(property: 'description', type: 'string', example: 'Complete redesign of company website'),
+                    new OA\Property(property: 'start_date', type: 'string', format: 'date', example: '2025-01-01'),
+                    new OA\Property(property: 'end_date', type: 'string', format: 'date', example: '2025-03-31'),
+                    new OA\Property(property: 'status', type: 'string', example: 'planned'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Project updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Project')
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function update(UpdateProjectRequest $request, Project $project): JsonResponse
     {
         $project->update($request->validated());

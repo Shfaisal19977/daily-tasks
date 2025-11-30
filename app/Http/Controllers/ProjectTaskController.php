@@ -7,20 +7,39 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as OA;
 
-/**
- * @group Tasks
- */
+#[OA\Tag(
+    name: 'Tasks',
+    description: 'Task management endpoints within projects'
+)]
 class ProjectTaskController extends Controller
 {
-    /**
-     * Get all tasks for a project
-     *
-     * @urlParam project integer required The ID of the project. Example: 1
-     *
-     * @response 200 [{"id": 1, "project_id": 1, "title": "Design Homepage", "details": "Create mockup", "status": "in_progress", "priority": "high", "due_date": "2025-01-15", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}]
-     * @response 404 {"message": "No query results for model [App\\Models\\Project] 1"}
-     */
+    #[OA\Get(
+        path: '/api/projects/{project}/tasks',
+        summary: 'Get all tasks for a specific project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of tasks',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Task')
+                )
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+        ]
+    )]
     public function index(Project $project): JsonResponse
     {
         $tasks = $project->tasks()
@@ -30,21 +49,42 @@ class ProjectTaskController extends Controller
         return response()->json($tasks);
     }
 
-    /**
-     * Create a new task in a project
-     *
-     * @urlParam project integer required The ID of the project. Example: 1
-     *
-     * @bodyParam title string required The task title. Example: Design Homepage
-     * @bodyParam details string The task details. Example: Create new homepage design mockup
-     * @bodyParam status string required The task status. Example: in_progress
-     * @bodyParam priority string required The task priority. Example: high
-     * @bodyParam due_date date The task due date. Example: 2025-01-15
-     *
-     * @response 201 {"id": 1, "project_id": 1, "title": "Design Homepage", "details": "Create mockup", "status": "in_progress", "priority": "high", "due_date": "2025-01-15", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Project] 1"}
-     * @response 422 {"message": "The title field is required."}
-     */
+    #[OA\Post(
+        path: '/api/projects/{project}/tasks',
+        summary: 'Create a new task in a project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['title', 'status', 'priority'],
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'Design Homepage'),
+                    new OA\Property(property: 'details', type: 'string', example: 'Create new homepage design mockup'),
+                    new OA\Property(property: 'status', type: 'string', example: 'in_progress'),
+                    new OA\Property(property: 'priority', type: 'string', example: 'high'),
+                    new OA\Property(property: 'due_date', type: 'string', format: 'date', example: '2025-01-15'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Task created successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Task')
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function store(StoreTaskRequest $request, Project $project): JsonResponse
     {
         $task = $project->tasks()->create($request->validated());
@@ -52,22 +92,90 @@ class ProjectTaskController extends Controller
         return response()->json($task, 201);
     }
 
-    /**
-     * Update a task
-     *
-     * @urlParam project integer required The ID of the project. Example: 1
-     * @urlParam task integer required The ID of the task. Example: 1
-     *
-     * @bodyParam title string The task title. Example: Design Homepage
-     * @bodyParam details string The task details. Example: Create new homepage design mockup
-     * @bodyParam status string The task status. Example: in_progress
-     * @bodyParam priority string The task priority. Example: high
-     * @bodyParam due_date date The task due date. Example: 2025-01-15
-     *
-     * @response 200 {"id": 1, "project_id": 1, "title": "Design Homepage", "details": "Create mockup", "status": "in_progress", "priority": "high", "due_date": "2025-01-15", "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "Not Found"}
-     * @response 422 {"message": "The status must be a string."}
-     */
+    #[OA\Put(
+        path: '/api/projects/{project}/tasks/{task}',
+        summary: 'Update a task in a project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'Design Homepage'),
+                    new OA\Property(property: 'details', type: 'string', example: 'Create new homepage design mockup'),
+                    new OA\Property(property: 'status', type: 'string', example: 'in_progress'),
+                    new OA\Property(property: 'priority', type: 'string', example: 'high'),
+                    new OA\Property(property: 'due_date', type: 'string', format: 'date', example: '2025-01-15'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Task updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Task')
+            ),
+            new OA\Response(response: 404, description: 'Project or Task not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
+    #[OA\Patch(
+        path: '/api/projects/{project}/tasks/{task}',
+        summary: 'Partially update a task in a project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'Design Homepage'),
+                    new OA\Property(property: 'details', type: 'string', example: 'Create new homepage design mockup'),
+                    new OA\Property(property: 'status', type: 'string', example: 'in_progress'),
+                    new OA\Property(property: 'priority', type: 'string', example: 'high'),
+                    new OA\Property(property: 'due_date', type: 'string', format: 'date', example: '2025-01-15'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Task updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Task')
+            ),
+            new OA\Response(response: 404, description: 'Project or Task not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function update(UpdateTaskRequest $request, Project $project, Task $task): JsonResponse
     {
         abort_if($task->project_id !== $project->id, 404);

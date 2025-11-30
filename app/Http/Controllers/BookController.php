@@ -6,17 +6,29 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as OA;
 
-/**
- * @group Books
- */
+#[OA\Tag(
+    name: 'Books',
+    description: 'Book management endpoints'
+)]
 class BookController extends Controller
 {
-    /**
-     * Get all books
-     *
-     * @response 200 [{"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}]
-     */
+    #[OA\Get(
+        path: '/api/books',
+        summary: 'Get all books',
+        tags: ['Books'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of books',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Book')
+                )
+            ),
+        ]
+    )]
     public function index(): JsonResponse
     {
         $books = Book::query()
@@ -26,29 +38,57 @@ class BookController extends Controller
         return response()->json($books);
     }
 
-    /**
-     * Get a single book
-     *
-     * @urlParam book integer required The ID of the book. Example: 1
-     *
-     * @response 200 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
-     */
+    #[OA\Get(
+        path: '/api/books/{book}',
+        summary: 'Get a single book',
+        tags: ['Books'],
+        parameters: [
+            new OA\Parameter(
+                name: 'book',
+                in: 'path',
+                required: true,
+                description: 'Book ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Book details',
+                content: new OA\JsonContent(ref: '#/components/schemas/Book')
+            ),
+            new OA\Response(response: 404, description: 'Book not found'),
+        ]
+    )]
     public function show(Book $book): JsonResponse
     {
         return response()->json($book);
     }
 
-    /**
-     * Create a new book
-     *
-     * @bodyParam title string required The book title. Example: The Great Gatsby
-     * @bodyParam author string required The book author. Example: F. Scott Fitzgerald
-     * @bodyParam publication_year integer required The publication year (4 digits). Example: 1925
-     *
-     * @response 201 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 422 {"message": "The title field is required."}
-     */
+    #[OA\Post(
+        path: '/api/books',
+        summary: 'Create a new book',
+        tags: ['Books'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['title', 'author', 'publication_year'],
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'The Great Gatsby'),
+                    new OA\Property(property: 'author', type: 'string', example: 'F. Scott Fitzgerald'),
+                    new OA\Property(property: 'publication_year', type: 'integer', example: 1925),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Book created successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Book')
+            ),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function store(StoreBookRequest $request): JsonResponse
     {
         $book = Book::query()->create($request->validated());
@@ -56,19 +96,72 @@ class BookController extends Controller
         return response()->json($book, 201);
     }
 
-    /**
-     * Update a book
-     *
-     * @urlParam book integer required The ID of the book. Example: 1
-     *
-     * @bodyParam title string The book title. Example: The Great Gatsby
-     * @bodyParam author string The book author. Example: F. Scott Fitzgerald
-     * @bodyParam publication_year integer The publication year (4 digits). Example: 1925
-     *
-     * @response 200 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
-     * @response 422 {"message": "The publication_year must be 4 digits."}
-     */
+    #[OA\Put(
+        path: '/api/books/{book}',
+        summary: 'Update a book',
+        tags: ['Books'],
+        parameters: [
+            new OA\Parameter(
+                name: 'book',
+                in: 'path',
+                required: true,
+                description: 'Book ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'The Great Gatsby'),
+                    new OA\Property(property: 'author', type: 'string', example: 'F. Scott Fitzgerald'),
+                    new OA\Property(property: 'publication_year', type: 'integer', example: 1925),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Book updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Book')
+            ),
+            new OA\Response(response: 404, description: 'Book not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
+    #[OA\Patch(
+        path: '/api/books/{book}',
+        summary: 'Partially update a book',
+        tags: ['Books'],
+        parameters: [
+            new OA\Parameter(
+                name: 'book',
+                in: 'path',
+                required: true,
+                description: 'Book ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'title', type: 'string', example: 'The Great Gatsby'),
+                    new OA\Property(property: 'author', type: 'string', example: 'F. Scott Fitzgerald'),
+                    new OA\Property(property: 'publication_year', type: 'integer', example: 1925),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Book updated successfully',
+                content: new OA\JsonContent(ref: '#/components/schemas/Book')
+            ),
+            new OA\Response(response: 404, description: 'Book not found'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ]
+    )]
     public function update(UpdateBookRequest $request, Book $book): JsonResponse
     {
         $book->update($request->validated());
@@ -76,14 +169,32 @@ class BookController extends Controller
         return response()->json($book);
     }
 
-    /**
-     * Delete a book
-     *
-     * @urlParam book integer required The ID of the book. Example: 1
-     *
-     * @response 200 {"message": "Book deleted successfully"}
-     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
-     */
+    #[OA\Delete(
+        path: '/api/books/{book}',
+        summary: 'Delete a book',
+        tags: ['Books'],
+        parameters: [
+            new OA\Parameter(
+                name: 'book',
+                in: 'path',
+                required: true,
+                description: 'Book ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Book deleted successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Book deleted successfully'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Book not found'),
+        ]
+    )]
     public function destroy(Book $book): JsonResponse
     {
         $book->delete();
