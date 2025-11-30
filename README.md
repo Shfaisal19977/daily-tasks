@@ -122,6 +122,24 @@ The system follows a hierarchical structure where:
    php artisan serve
    ```
 
+## API Documentation
+
+This API includes interactive Swagger/OpenAPI documentation. After starting the server, visit:
+
+**Swagger UI**: `http://localhost:8000/api/documentation`
+
+The Swagger documentation provides:
+- Interactive API testing interface
+- Complete endpoint documentation
+- Request/response schemas
+- Try-it-out functionality
+
+To regenerate the documentation after making changes:
+
+```bash
+php artisan l5-swagger:generate
+```
+
 ## Testing
 
 Run the test suite using Pest:
