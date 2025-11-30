@@ -117,27 +117,35 @@ The system follows a hierarchical structure where:
    ```bash
    php artisan migrate
    ```
-6. Start the development server:
-   ```bash
-   php artisan serve
+6. **Access the application**
+   
+   Since you're using Laravel Herd, the application is automatically available at:
    ```
+   http://laravel1.test
+   ```
+   
+   (If using `php artisan serve` instead, it will be at `http://localhost:8000`)
 
 ## API Documentation
 
-This API includes interactive Swagger/OpenAPI documentation. After starting the server, visit:
+This API includes interactive API documentation powered by Scribe. Visit:
 
-**Swagger UI**: `http://localhost:8000/api/documentation`
+**API Documentation**: `http://laravel1.test/docs`
 
-The Swagger documentation provides:
+(If using `php artisan serve`, use `http://localhost:8000/docs`)
+
+The documentation provides:
 - Interactive API testing interface
-- Complete endpoint documentation
+- Complete endpoint documentation with examples
 - Request/response schemas
 - Try-it-out functionality
+- Code samples in multiple languages
+- Postman collection and OpenAPI spec downloads
 
 To regenerate the documentation after making changes:
 
 ```bash
-php artisan l5-swagger:generate
+php artisan scribe:generate
 ```
 
 ## Testing

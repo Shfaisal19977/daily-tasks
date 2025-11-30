@@ -7,10 +7,15 @@ use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Books
+ */
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get all books
+     *
+     * @response 200 [{"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}]
      */
     public function index(): JsonResponse
     {
@@ -22,7 +27,12 @@ class BookController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get a single book
+     *
+     * @urlParam book integer required The ID of the book. Example: 1
+     *
+     * @response 200 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
+     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
      */
     public function show(Book $book): JsonResponse
     {
@@ -30,7 +40,14 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new book
+     *
+     * @bodyParam title string required The book title. Example: The Great Gatsby
+     * @bodyParam author string required The book author. Example: F. Scott Fitzgerald
+     * @bodyParam publication_year integer required The publication year (4 digits). Example: 1925
+     *
+     * @response 201 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
+     * @response 422 {"message": "The title field is required."}
      */
     public function store(StoreBookRequest $request): JsonResponse
     {
@@ -40,7 +57,17 @@ class BookController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a book
+     *
+     * @urlParam book integer required The ID of the book. Example: 1
+     *
+     * @bodyParam title string The book title. Example: The Great Gatsby
+     * @bodyParam author string The book author. Example: F. Scott Fitzgerald
+     * @bodyParam publication_year integer The publication year (4 digits). Example: 1925
+     *
+     * @response 200 {"id": 1, "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "publication_year": 1925, "created_at": "2025-11-30T18:00:00.000000Z", "updated_at": "2025-11-30T18:00:00.000000Z"}
+     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
+     * @response 422 {"message": "The publication_year must be 4 digits."}
      */
     public function update(UpdateBookRequest $request, Book $book): JsonResponse
     {
@@ -50,7 +77,12 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a book
+     *
+     * @urlParam book integer required The ID of the book. Example: 1
+     *
+     * @response 200 {"message": "Book deleted successfully"}
+     * @response 404 {"message": "No query results for model [App\\Models\\Book] 1"}
      */
     public function destroy(Book $book): JsonResponse
     {
