@@ -54,13 +54,13 @@ Build a project management API system with the following features:
 - `GET /api/projects` - List all projects
 - `POST /api/projects` - Create a new project
 - `PUT /api/projects/{project}` - Update a project
-- `PATCH /api/projects/{project}` - Update a project (partial)
+- `PATCH /api/projects/{project}` - Update a project
 
 ### Tasks
 - `GET /api/projects/{project}/tasks` - List all tasks for a project
 - `POST /api/projects/{project}/tasks` - Create a new task in a project
 - `PUT /api/projects/{project}/tasks/{task}` - Update a task
-- `PATCH /api/projects/{project}/tasks/{task}` - Update a task (partial)
+- `PATCH /api/projects/{project}/tasks/{task}` - Update a task
 
 ### Comments
 - `GET /api/tasks/{task}/comments` - List all comments for a task
@@ -74,7 +74,7 @@ Build a project management API system with the following features:
 - `POST /api/books` - Create a new book
 - `GET /api/books/{book}` - Get a single book by ID
 - `PUT /api/books/{book}` - Update a book
-- `PATCH /api/books/{book}` - Update a book (partial)
+- `PATCH /api/books/{book}` - Update a book
 - `DELETE /api/books/{book}` - Delete a book
 
 ### Products
@@ -82,7 +82,7 @@ Build a project management API system with the following features:
 - `POST /api/products` - Create a new product
 - `GET /api/products/{product}` - Get a single product by ID
 - `PUT /api/products/{product}` - Update a product
-- `PATCH /api/products/{product}` - Update a product (partial)
+- `PATCH /api/products/{product}` - Update a product
 - `DELETE /api/products/{product}` - Delete a product
 - `POST /api/products/{product}/reduce-stock` - Reduce product stock by amount
 
