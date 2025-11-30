@@ -113,7 +113,7 @@ Build a project management API system with the following features:
    ```
 6. Start the development server:
    ```bash
-   php artisan serve
+   php artisan serve/ser
    ```
 
 ## Testing
@@ -147,16 +147,13 @@ php artisan test
 **Update Product (UpdateProductRequest):**
 - Same rules as create, but all fields use `sometimes` for partial updates
 
+**Reduce Stock (ReduceStockRequest):**
+- `amount`: required, integer, minimum 1
+
 ### Reduce Stock Endpoint
 
-The `POST /api/products/{product}/reduce-stock` endpoint accepts:
-```json
-{
-  "amount": 3
-}
-```
+The `POST /api/products/{product}/reduce-stock` endpoint allows you to reduce the product's stock quantity.
 
-- Validates that `amount` is required, integer, and minimum 1
-- Returns 422 error if insufficient stock is available
-- Returns updated product on success
+
+
 
