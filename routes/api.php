@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
@@ -8,11 +9,14 @@ use App\Http\Controllers\TaskCommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-const BOOK_ROUTE_PARAM = '/{book}';
-const PRODUCT_ROUTE_PARAM = '/{product}';
-const PROJECT_ROUTE_PARAM = '/{project}';
-const TASK_ROUTE_PARAM = '/{task}';
-const COMMENT_ROUTE_PARAM = '/{comment}';
+if (! defined('BOOK_ROUTE_PARAM')) {
+    define('BOOK_ROUTE_PARAM', '/{book}');
+    define('CATEGORY_ROUTE_PARAM', '/{category}');
+    define('PRODUCT_ROUTE_PARAM', '/{product}');
+    define('PROJECT_ROUTE_PARAM', '/{project}');
+    define('TASK_ROUTE_PARAM', '/{task}');
+    define('COMMENT_ROUTE_PARAM', '/{comment}');
+}
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,6 +29,15 @@ Route::controller(BookController::class)->prefix('books')->group(function () {
     Route::put(BOOK_ROUTE_PARAM, 'update');
     Route::patch(BOOK_ROUTE_PARAM, 'update');
     Route::delete(BOOK_ROUTE_PARAM, 'destroy');
+});
+
+Route::controller(CategoryController::class)->prefix('categories')->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get(CATEGORY_ROUTE_PARAM, 'show');
+    Route::put(CATEGORY_ROUTE_PARAM, 'update');
+    Route::patch(CATEGORY_ROUTE_PARAM, 'update');
+    Route::delete(CATEGORY_ROUTE_PARAM, 'destroy');
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {

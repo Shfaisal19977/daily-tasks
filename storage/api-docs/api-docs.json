@@ -268,6 +268,382 @@
                 }
             }
         },
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get all categories",
+                "operationId": "3f5817a34833d0a1f4af4548dd3aeaba",
+                "responses": {
+                    "200": {
+                        "description": "List of categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Category"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Create a new category",
+                "description": "Creates a new category with name, price, and optional description. All fields are validated before creation.",
+                "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
+                "requestBody": {
+                    "description": "Category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCategoryRequest"
+                            },
+                            "example": {
+                                "name": "Electronics",
+                                "price": 99.99,
+                                "description": "Electronic products and accessories"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Category created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Electronics",
+                                    "price": "99.99",
+                                    "description": "Electronic products and accessories",
+                                    "created_at": "2025-12-01T15:00:00.000000Z",
+                                    "updated_at": "2025-12-01T15:00:00.000000Z"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "The name field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/categories/{category}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get a single category",
+                "description": "Retrieves detailed information about a specific category by ID",
+                "operationId": "e92579e78391b6199e78c2a091dbea0a",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Electronics",
+                                    "price": "99.99",
+                                    "description": "Electronic products and accessories",
+                                    "created_at": "2025-12-01T15:00:00.000000Z",
+                                    "updated_at": "2025-12-01T15:00:00.000000Z"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\Models\\Category] 999"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Update a category",
+                "operationId": "02aa39951e67916277e28086f85909c8",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Category data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCategoryRequest"
+                            },
+                            "example": {
+                                "name": "Electronics Pro",
+                                "price": 149.99,
+                                "description": "Premium electronic products"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Electronics Pro",
+                                    "price": "149.99",
+                                    "description": "Premium electronic products",
+                                    "created_at": "2025-12-01T15:00:00.000000Z",
+                                    "updated_at": "2025-12-01T16:30:00.000000Z"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\Models\\Category] 999"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The price must be a number."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "price": [
+                                                    "The price must be a number."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Delete a category",
+                "operationId": "d9ecd5c4a74c4d75339251863eedc08c",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Partially update a category",
+                "operationId": "f6cb36bb8aedb9159d7b30573767faf1",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Category ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Category data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCategoryRequest"
+                            },
+                            "example": {
+                                "name": "Electronics Pro",
+                                "price": 149.99
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "name": "Electronics Pro",
+                                    "price": "149.99",
+                                    "description": "Electronic products and accessories",
+                                    "created_at": "2025-12-01T15:00:00.000000Z",
+                                    "updated_at": "2025-12-01T16:30:00.000000Z"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\Models\\Category] 999"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The price must be a number."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "price": [
+                                                    "The price must be a number."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -1566,6 +1942,98 @@
                 },
                 "type": "object"
             },
+            "Category": {
+                "description": "Category model with name, price, and description",
+                "properties": {
+                    "id": {
+                        "description": "Unique category identifier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Category name",
+                        "type": "string",
+                        "example": "Electronics"
+                    },
+                    "price": {
+                        "description": "Category price in decimal format",
+                        "type": "string",
+                        "format": "decimal",
+                        "example": "99.99"
+                    },
+                    "description": {
+                        "description": "Category description",
+                        "type": "string",
+                        "example": "Electronic products and accessories",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-12-01T15:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-12-01T15:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreCategoryRequest": {
+                "required": [
+                    "name",
+                    "price"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Category name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Electronics"
+                    },
+                    "price": {
+                        "description": "Category price (must be >= 0)",
+                        "type": "number",
+                        "format": "float",
+                        "minimum": 0,
+                        "example": 99.99
+                    },
+                    "description": {
+                        "description": "Optional category description",
+                        "type": "string",
+                        "example": "Electronic products and accessories",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCategoryRequest": {
+                "properties": {
+                    "name": {
+                        "description": "Category name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Electronics Pro"
+                    },
+                    "price": {
+                        "description": "Category price (must be >= 0)",
+                        "type": "number",
+                        "format": "float",
+                        "minimum": 0,
+                        "example": 149.99
+                    },
+                    "description": {
+                        "description": "Category description",
+                        "type": "string",
+                        "example": "Premium electronic products",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "Comment": {
                 "description": "Comment model for task collaboration",
                 "properties": {
@@ -2038,6 +2506,10 @@
         {
             "name": "Books",
             "description": "Book management endpoints"
+        },
+        {
+            "name": "Categories",
+            "description": "Category management endpoints"
         },
         {
             "name": "Products",
