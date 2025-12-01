@@ -54,6 +54,14 @@ The system follows a hierarchical structure where:
 - Reduce product stock quantity
 - Products include: name, price, quantity, and description
 
+### Categories
+- List all categories
+- Get a single category by ID
+- Create new categories with validation
+- Update existing categories
+- Delete categories
+- Categories include: name, price, and description
+
 ## API Endpoints
 
 ### Projects
@@ -91,6 +99,14 @@ The system follows a hierarchical structure where:
 - `PATCH /api/products/{product}` - Update a product
 - `DELETE /api/products/{product}` - Delete a product
 - `POST /api/products/{product}/reduce-stock` - Reduce product stock by amount
+
+### Categories
+- `GET /api/categories` - List all categories
+- `POST /api/categories` - Create a new category
+- `GET /api/categories/{category}` - Get a single category by ID
+- `PUT /api/categories/{category}` - Update a category
+- `PATCH /api/categories/{category}` - Update a category
+- `DELETE /api/categories/{category}` - Delete a category
 
 ## Technology Stack
 
@@ -154,9 +170,9 @@ php artisan test
 
 ## Project Structure
 
-- `app/Models/` - Eloquent models (Project, Task, Comment, Book, Product)
+- `app/Models/` - Eloquent models (Project, Task, Comment, Book, Product, Category)
 - `app/Models/Schemas/` - OpenAPI schema definitions for Swagger documentation
-- `app/Http/Controllers/` - API controllers with OpenAPI annotations (ProjectController, BookController, ProductController, etc.)
+- `app/Http/Controllers/` - API controllers with OpenAPI annotations (ProjectController, BookController, ProductController, CategoryController, etc.)
 - `app/Http/Requests/` - Form request validation classes with custom error messages
 - `database/migrations/` - Database schema migrations
 - `database/factories/` - Model factories for testing
@@ -172,6 +188,7 @@ All API endpoints use Laravel Form Request classes for validation with custom er
 - **StoreCommentRequest** / **UpdateCommentRequest** - Validates comment data (comment_text, author)
 - **StoreBookRequest** / **UpdateBookRequest** - Validates book data (title, author, publication_year)
 - **StoreProductRequest** / **UpdateProductRequest** - Validates product data (name, price, quantity, description)
+- **StoreCategoryRequest** / **UpdateCategoryRequest** - Validates category data (name, price, description)
 - **ReduceStockRequest** - Validates stock reduction amount
 
 All validation rules include custom, user-friendly error messages that provide clear feedback when validation fails.
@@ -188,4 +205,7 @@ A complete CRUD API for managing products with inventory management capabilities
 - Product creation and management
 - Stock quantity tracking
 - Stock reduction functionality with validation
+
+### Categories API
+A complete CRUD API for managing categories with name, price, and description fields. Categories support decimal pricing with 2 decimal places.
 
