@@ -109,6 +109,28 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/projects/{project}',
+        summary: 'Get a single project',
+        tags: ['Projects'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Project details',
+                content: new OA\JsonContent(ref: '#/components/schemas/Project')
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+        ]
+    )]
     public function show(Project $project): JsonResponse|View
     {
         $project->load('tasks.comments');
@@ -204,5 +226,42 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
+    }
+
+    #[OA\Delete(
+        path: '/api/projects/{project}',
+        summary: 'Delete a project',
+        tags: ['Projects'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Project deleted successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Project deleted successfully'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Project not found'),
+        ]
+    )]
+    public function destroy(Project $project): JsonResponse|RedirectResponse
+    {
+        $project->delete();
+
+        if ($this->wantsJson()) {
+            return response()->json(['message' => 'Project deleted successfully'], 200);
+        }
+
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
     }
 }

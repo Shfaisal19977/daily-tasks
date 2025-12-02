@@ -40,7 +40,7 @@
                     "Books"
                 ],
                 "summary": "Create a new book",
-                "operationId": "47047e95a700b3271b697e57d0965191",
+                "operationId": "ee195f5779f5c36648b4fa1eefa4e7ee",
                 "requestBody": {
                     "description": "Book data",
                     "required": true,
@@ -113,7 +113,7 @@
                     "Books"
                 ],
                 "summary": "Update a book",
-                "operationId": "cf6535a3185059974fb8baaf90b29eaf",
+                "operationId": "43de6e4ac0bb8c5a37df8a57c4cdb6b6",
                 "parameters": [
                     {
                         "name": "book",
@@ -212,7 +212,7 @@
                     "Books"
                 ],
                 "summary": "Partially update a book",
-                "operationId": "cbd3ccd71382faff7685bd45cecb7c30",
+                "operationId": "946763acbc4bf87c5edc6d6e68b088bb",
                 "parameters": [
                     {
                         "name": "book",
@@ -297,7 +297,7 @@
                 ],
                 "summary": "Create a new category",
                 "description": "Creates a new category with name, price, and optional description. All fields are validated before creation.",
-                "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
+                "operationId": "c7568de7109834ae917e2041e9193428",
                 "requestBody": {
                     "description": "Category data",
                     "required": true,
@@ -422,7 +422,7 @@
                     "Categories"
                 ],
                 "summary": "Update a category",
-                "operationId": "02aa39951e67916277e28086f85909c8",
+                "operationId": "84fc305d9adacf766208d129d5fd218f",
                 "parameters": [
                     {
                         "name": "category",
@@ -555,7 +555,7 @@
                     "Categories"
                 ],
                 "summary": "Partially update a category",
-                "operationId": "f6cb36bb8aedb9159d7b30573767faf1",
+                "operationId": "0e6f89262ca0b49f2e57a4214fc71943",
                 "parameters": [
                     {
                         "name": "category",
@@ -673,7 +673,7 @@
                 ],
                 "summary": "Create a new product",
                 "description": "Creates a new product with name, price, quantity, and optional description. All fields are validated before creation.",
-                "operationId": "e8185e307706e2cd84bbcf5171e2f09d",
+                "operationId": "9934bcf87d6613c14890dbdd587d311a",
                 "requestBody": {
                     "description": "Product data",
                     "required": true,
@@ -801,7 +801,7 @@
                     "Products"
                 ],
                 "summary": "Update a product",
-                "operationId": "c474d1318e5b8c3de1f4d52b6053111f",
+                "operationId": "ed136e1823fcc4b171c630259123b615",
                 "parameters": [
                     {
                         "name": "product",
@@ -935,7 +935,7 @@
                     "Products"
                 ],
                 "summary": "Partially update a product",
-                "operationId": "306e2ce249fd864cc216e1880c233001",
+                "operationId": "be41dfbc261d24cbd62fbdb52349b9b6",
                 "parameters": [
                     {
                         "name": "product",
@@ -1141,7 +1141,7 @@
                     "Projects"
                 ],
                 "summary": "Create a new project",
-                "operationId": "a4dd4c17bf5fc24c224357f03dcc848a",
+                "operationId": "d0613a552f223187f745c8fb72a8c189",
                 "requestBody": {
                     "description": "Project data",
                     "required": true,
@@ -1209,12 +1209,45 @@
             }
         },
         "/api/projects/{project}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get a single project",
+                "operationId": "1352e06e55f6ab10d3702509cd385918",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "path",
+                        "description": "Project ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Project not found"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "Update a project",
-                "operationId": "a93b65e3037bfd5ea5cdc1b3dd11ba53",
+                "operationId": "02d733393501fa6df0a8248eaea98210",
                 "parameters": [
                     {
                         "name": "project",
@@ -1279,12 +1312,51 @@
                     }
                 }
             },
+            "delete": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Delete a project",
+                "operationId": "63c289a907902132dd95dd7ecb50143f",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "path",
+                        "description": "Project ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Project deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Project not found"
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "Partially update a project",
-                "operationId": "ee35632abc0168537257bd8f5baa9f30",
+                "operationId": "1cff741d0b79bde0752945bb47263ef1",
                 "parameters": [
                     {
                         "name": "project",
@@ -1392,7 +1464,7 @@
                     "Tasks"
                 ],
                 "summary": "Create a new task in a project",
-                "operationId": "cbae92ae4385552c40667370ed8fdd1a",
+                "operationId": "524df739ab02696f2c946d7720a0eb2d",
                 "parameters": [
                     {
                         "name": "project",
@@ -1443,12 +1515,54 @@
             }
         },
         "/api/projects/{project}/tasks/{task}": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Get a single task from a project",
+                "operationId": "9a4cc56c8c60222107f0ccaca56fd2c8",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "path",
+                        "description": "Project ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Project or Task not found"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "Tasks"
                 ],
                 "summary": "Update a task in a project",
-                "operationId": "43ceae7d20dba1a92c9d735f6d268f29",
+                "operationId": "8987ac7a53f4a43b6d1fd391321b0211",
                 "parameters": [
                     {
                         "name": "project",
@@ -1521,12 +1635,60 @@
                     }
                 }
             },
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Delete a task from a project",
+                "operationId": "0c9133260cede27a9b86499f4fd0d064",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "path",
+                        "description": "Project ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Task deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Project or Task not found"
+                    }
+                }
+            },
             "patch": {
                 "tags": [
                     "Tasks"
                 ],
                 "summary": "Partially update a task in a project",
-                "operationId": "4323c49280a53cec05a168d5cbdc4955",
+                "operationId": "25782511b7a170a80e3fe51351c574c0",
                 "parameters": [
                     {
                         "name": "project",
@@ -1642,7 +1804,7 @@
                     "Comments"
                 ],
                 "summary": "Create a new comment on a task",
-                "operationId": "ae1daabcd0889a518726b2e5b2e56282",
+                "operationId": "7bedcb910443793b68c8851ce207d2ad",
                 "parameters": [
                     {
                         "name": "task",
@@ -1690,12 +1852,54 @@
             }
         },
         "/api/tasks/{task}/comments/{comment}": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Get a single comment from a task",
+                "operationId": "636bc054f11e8ab469f4188832819310",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Comment"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task or Comment not found"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "Comments"
                 ],
                 "summary": "Update a comment on a task",
-                "operationId": "520a4605219040a1a41aba84355e927b",
+                "operationId": "6dc080fdb545d267b165287fa990d69a",
                 "parameters": [
                     {
                         "name": "task",
@@ -1795,7 +1999,7 @@
                     "Comments"
                 ],
                 "summary": "Partially update a comment on a task",
-                "operationId": "8059cf49ddff252036c7145991020e96",
+                "operationId": "662607305f8b59fa34d46091bab671b0",
                 "parameters": [
                     {
                         "name": "task",

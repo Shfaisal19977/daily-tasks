@@ -109,6 +109,47 @@ class TaskCommentController extends Controller
         return redirect()->route('tasks.comments.index', $task)->with('success', 'Comment created successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/tasks/{task}/comments/{comment}',
+        summary: 'Get a single comment from a task',
+        tags: ['Comments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'comment',
+                in: 'path',
+                required: true,
+                description: 'Comment ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Comment details',
+                content: new OA\JsonContent(ref: '#/components/schemas/Comment')
+            ),
+            new OA\Response(response: 404, description: 'Task or Comment not found'),
+        ]
+    )]
+    public function show(Task $task, Comment $comment): JsonResponse|View
+    {
+        abort_if($comment->task_id !== $task->id, 404);
+        $task->load('project');
+
+        if ($this->wantsJson()) {
+            return response()->json($comment);
+        }
+
+        return view('comments.show', compact('task', 'comment'));
+    }
+
     #[OA\Put(
         path: '/api/tasks/{task}/comments/{comment}',
         summary: 'Update a comment on a task',

@@ -108,6 +108,48 @@ class ProjectTaskController extends Controller
         return redirect()->route('projects.tasks.index', $project)->with('success', 'Task created successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/projects/{project}/tasks/{task}',
+        summary: 'Get a single task from a project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Task details',
+                content: new OA\JsonContent(ref: '#/components/schemas/Task')
+            ),
+            new OA\Response(response: 404, description: 'Project or Task not found'),
+        ]
+    )]
+    public function show(Project $project, Task $task): JsonResponse|View
+    {
+        abort_if($task->project_id !== $project->id, 404);
+
+        $task->load('comments');
+
+        if ($this->wantsJson()) {
+            return response()->json($task);
+        }
+
+        return view('tasks.show', compact('project', 'task'));
+    }
+
     #[OA\Put(
         path: '/api/projects/{project}/tasks/{task}',
         summary: 'Update a task in a project',
@@ -210,5 +252,51 @@ class ProjectTaskController extends Controller
         }
 
         return redirect()->route('projects.tasks.index', $project)->with('success', 'Task updated successfully.');
+    }
+
+    #[OA\Delete(
+        path: '/api/projects/{project}/tasks/{task}',
+        summary: 'Delete a task from a project',
+        tags: ['Tasks'],
+        parameters: [
+            new OA\Parameter(
+                name: 'project',
+                in: 'path',
+                required: true,
+                description: 'Project ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'task',
+                in: 'path',
+                required: true,
+                description: 'Task ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Task deleted successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Task deleted successfully'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Project or Task not found'),
+        ]
+    )]
+    public function destroy(Project $project, Task $task): JsonResponse|RedirectResponse
+    {
+        abort_if($task->project_id !== $project->id, 404);
+
+        $task->delete();
+
+        if ($this->wantsJson()) {
+            return response()->json(['message' => 'Task deleted successfully'], 200);
+        }
+
+        return redirect()->route('projects.tasks.index', $project)->with('success', 'Task deleted successfully.');
     }
 }

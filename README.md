@@ -135,13 +135,16 @@ The system follows a hierarchical structure where:
    ```
 6. **Access the application**
    
+   **Herd**: The project is configured for Laravel Herd. Access it at:
+   - `http://daily-tasks.test`
+   
    (If using `php artisan serve` instead, it will be at `http://localhost:8000`)
 
 ## API Documentation
 
 This API includes interactive Swagger/OpenAPI documentation with dark mode. Visit:
 
-**Swagger UI**: `http://laravel1.test/api/documentation`
+**Swagger UI**: `http://daily-tasks.test/api/documentation`
 
 (If using `php artisan serve`, use `http://localhost:8000/api/documentation`)
 
