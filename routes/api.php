@@ -53,20 +53,25 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
 Route::controller(ProjectController::class)->prefix('projects')->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');
+    Route::get(PROJECT_ROUTE_PARAM, 'show');
     Route::put(PROJECT_ROUTE_PARAM, 'update');
     Route::patch(PROJECT_ROUTE_PARAM, 'update');
+    Route::delete(PROJECT_ROUTE_PARAM, 'destroy');
 
     Route::controller(ProjectTaskController::class)->prefix('{project}/tasks')->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
+        Route::get(TASK_ROUTE_PARAM, 'show');
         Route::put(TASK_ROUTE_PARAM, 'update');
         Route::patch(TASK_ROUTE_PARAM, 'update');
+        Route::delete(TASK_ROUTE_PARAM, 'destroy');
     });
 });
 
 Route::controller(TaskCommentController::class)->prefix('tasks/{task}/comments')->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');
+    Route::get(COMMENT_ROUTE_PARAM, 'show');
     Route::put(COMMENT_ROUTE_PARAM, 'update');
     Route::patch(COMMENT_ROUTE_PARAM, 'update');
     Route::delete(COMMENT_ROUTE_PARAM, 'destroy');

@@ -36,15 +36,18 @@ Route::prefix('projects/{project}/tasks')->name('projects.tasks.')->group(functi
     Route::get('/', [ProjectTaskController::class, 'index'])->name('index');
     Route::get('/create', [ProjectTaskController::class, 'create'])->name('create');
     Route::post('/', [ProjectTaskController::class, 'store'])->name('store');
+    Route::get('/{task}', [ProjectTaskController::class, 'show'])->name('show');
     Route::get('/{task}/edit', [ProjectTaskController::class, 'edit'])->name('edit');
     Route::put('/{task}', [ProjectTaskController::class, 'update'])->name('update');
     Route::patch('/{task}', [ProjectTaskController::class, 'update'])->name('update');
+    Route::delete('/{task}', [ProjectTaskController::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('tasks/{task}/comments')->name('tasks.comments.')->group(function () {
     Route::get('/', [TaskCommentController::class, 'index'])->name('index');
     Route::get('/create', [TaskCommentController::class, 'create'])->name('create');
     Route::post('/', [TaskCommentController::class, 'store'])->name('store');
+    Route::get('/{comment}', [TaskCommentController::class, 'show'])->name('show');
     Route::get('/{comment}/edit', [TaskCommentController::class, 'edit'])->name('edit');
     Route::put('/{comment}', [TaskCommentController::class, 'update'])->name('update');
     Route::patch('/{comment}', [TaskCommentController::class, 'update'])->name('update');
