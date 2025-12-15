@@ -26,4 +26,20 @@ class StoreCommentRequest extends FormRequest
             'author' => ['required', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'comment_text.required' => 'The comment text field is required.',
+            'comment_text.string' => 'The comment text must be a string.',
+            'author.required' => 'The author field is required.',
+            'author.string' => 'The author must be a string.',
+            'author.max' => 'The author may not be greater than 255 characters.',
+        ];
+    }
 }

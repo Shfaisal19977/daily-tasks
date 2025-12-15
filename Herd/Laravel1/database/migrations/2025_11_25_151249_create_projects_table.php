@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->string('status')->default('planned');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

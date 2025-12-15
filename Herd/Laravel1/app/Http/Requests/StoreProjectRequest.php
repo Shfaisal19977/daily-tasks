@@ -29,4 +29,24 @@ class StoreProjectRequest extends FormRequest
             'status' => ['nullable', 'string', 'max:50'],
         ];
     }
+
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name may not be greater than 255 characters.',
+            'description.string' => 'The description must be a string.',
+            'start_date.date' => 'The start date must be a valid date.',
+            'end_date.date' => 'The end date must be a valid date.',
+            'end_date.after_or_equal' => 'The end date must be equal to or after the start date.',
+            'status.string' => 'The status must be a string.',
+            'status.max' => 'The status may not be greater than 50 characters.',
+        ];
+    }
 }

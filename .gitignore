@@ -1,0 +1,84 @@
+# Windows System Files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Windows User Directories
+Application Data/
+Cookies/
+Local Settings/
+My Documents/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+AppData/
+Contacts/
+Desktop/
+Documents/
+Downloads/
+Favorites/
+Links/
+Music/
+Pictures/
+Videos/
+Saved Games/
+Searches/
+OneDrive/
+3D Objects/
+IntelGraphicsProfiles/
+
+# System Files
+NTUSER.DAT*
+ntuser.dat*
+*.LOG1
+*.LOG2
+*.ini
+*.blf
+*.regtrans-ms
+*.TM.blf
+*.TMContainer*
+
+# Personal Config Files
+.bash_history
+.gitconfig
+.yarnrc
+.lesshst
+
+# IDE and Editor Directories
+.codegpt/
+.config/
+.cursor/
+.dbclient/
+.gk/
+.sonarlint/
+.trae-aicc/
+.trae/
+.vscode/
+.wdc/
+
+# Other
+BullseyeCoverageError.txt
+daily-tasks/
+
+# Laravel specific (already in project .gitignore, but adding here for safety)
+.env
+.env.backup
+.env.production
+node_modules/
+vendor/
+storage/*.key
+public/storage
+public/build
+public/hot
+.phpunit.result.cache
+/.phpunit.cache
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/auth.json

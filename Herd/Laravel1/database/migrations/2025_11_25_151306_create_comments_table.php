@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('comment_text');
             $table->string('author');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

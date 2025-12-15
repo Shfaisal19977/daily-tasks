@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('details')->nullable();
-            $table->string('status')->default('pending');
-            $table->string('priority')->default('medium');
+            $table->string('status');
+            $table->string('priority');
             $table->date('due_date')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
