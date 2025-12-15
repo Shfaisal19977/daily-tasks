@@ -1,4 +1,5 @@
-# Windows System Files
+# OS junk
+.DS_Store
 Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
@@ -63,22 +64,44 @@ ntuser.dat*
 # Other
 BullseyeCoverageError.txt
 daily-tasks/
+small-task/
 
-# Laravel specific (already in project .gitignore, but adding here for safety)
+# Environment files
 .env
 .env.backup
 .env.production
-node_modules/
-vendor/
-storage/*.key
-public/storage
-public/build
-public/hot
+.env.testing
+
+# Tooling / editors
+.phpactor.json
 .phpunit.result.cache
-/.phpunit.cache
 /.fleet
 /.idea
 /.nova
+/.phpunit.cache
 /.vscode
 /.zed
+/.cursor
+/.codegpt
+
+# Composer / NPM
+/vendor
+/node_modules
+
+# Laravel build artifacts
+/bootstrap/cache/*.php
+/public/build
+/public/hot
+/public/storage
+/storage/app/public
+/storage/framework/cache/*.php
+/storage/framework/sessions/*.php
+/storage/framework/testing
+/storage/logs/*.log
+/storage/*.key
+/storage/pail
+
+# Misc auth/config
 /auth.json
+Homestead.json
+Homestead.yaml
