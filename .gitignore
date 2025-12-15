@@ -65,6 +65,7 @@ ntuser.dat*
 BullseyeCoverageError.txt
 daily-tasks/
 small-task/
+Herd/
 
 # Environment files
 .env
