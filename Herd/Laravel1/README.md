@@ -1,59 +1,211 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Project Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based REST API for managing projects, tasks, and comments. This application provides a hierarchical structure where projects contain tasks, and tasks contain comments.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a comprehensive project management API system built with Laravel that enables you to:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Projects**: Create and manage projects with details like name, description, dates, and status
+- **Tasks**: Create and manage tasks within projects with priority, status, and due dates
+- **Comments**: Add comments to tasks for collaboration and tracking
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The system follows a hierarchical structure where:
+- Projects can have multiple tasks
+- Tasks can have multiple comments
+- All relationships are properly maintained and validated
 
-## Learning Laravel
+## Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Projects
+- List all projects with their associated tasks and comments
+- Create new projects with validation
+- Update existing projects
+- Projects include: name, description, start date, end date, and status
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Tasks
+- List all tasks for a specific project
+- Create new tasks within a project
+- Update existing tasks within a project
+- Tasks include: title, details, status, priority, and due date
+- Tasks are automatically associated with their parent project
 
-## Laravel Sponsors
+### Comments
+- List all comments for a specific task
+- Create new comments on tasks
+- Update existing comments on tasks
+- Delete comments
+- Comments include: comment text and author name
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Books
+- List all books
+- Get a single book by ID
+- Create new books with validation
+- Update existing books
+- Delete books
+- Books include: title, author, and publication year (4-digit validation)
 
-### Premium Partners
+### Products
+- List all products
+- Get a single product by ID
+- Create new products with validation
+- Update existing products
+- Delete products
+- Reduce product stock quantity
+- Products include: name, price, quantity, and description
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Categories
+- List all categories
+- Get a single category by ID
+- Create new categories with validation
+- Update existing categories
+- Delete categories
+- Categories include: name, price, and description
 
-## Contributing
+## API Endpoints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Projects
+- `GET /api/projects` - List all projects
+- `POST /api/projects` - Create a new project
+- `PUT /api/projects/{project}` - Update a project
+- `PATCH /api/projects/{project}` - Update a project
 
-## Code of Conduct
+### Tasks
+- `GET /api/projects/{project}/tasks` - List all tasks for a project
+- `POST /api/projects/{project}/tasks` - Create a new task in a project
+- `PUT /api/projects/{project}/tasks/{task}` - Update a task
+- `PATCH /api/projects/{project}/tasks/{task}` - Update a task
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Comments
+- `GET /api/tasks/{task}/comments` - List all comments for a task
+- `POST /api/tasks/{task}/comments` - Create a new comment on a task
+- `PUT /api/tasks/{task}/comments/{comment}` - Update a comment
+- `PATCH /api/tasks/{task}/comments/{comment}` - Update a comment
+- `DELETE /api/tasks/{task}/comments/{comment}` - Delete a comment
 
-## Security Vulnerabilities
+### Books
+- `GET /api/books` - List all books
+- `POST /api/books` - Create a new book
+- `GET /api/books/{book}` - Get a single book by ID
+- `PUT /api/books/{book}` - Update a book
+- `PATCH /api/books/{book}` - Update a book
+- `DELETE /api/books/{book}` - Delete a book
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Products
+- `GET /api/products` - List all products
+- `POST /api/products` - Create a new product
+- `GET /api/products/{product}` - Get a single product by ID
+- `PUT /api/products/{product}` - Update a product
+- `PATCH /api/products/{product}` - Update a product
+- `DELETE /api/products/{product}` - Delete a product
+- `POST /api/products/{product}/reduce-stock` - Reduce product stock by amount
 
-## License
+### Categories
+- `GET /api/categories` - List all categories
+- `POST /api/categories` - Create a new category
+- `GET /api/categories/{category}` - Get a single category by ID
+- `PUT /api/categories/{category}` - Update a category
+- `PATCH /api/categories/{category}` - Update a category
+- `DELETE /api/categories/{category}` - Delete a category
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Technology Stack
+
+- **Framework**: Laravel 12
+- **PHP**: 8.4.15
+- **Testing**: Pest PHP v4
+- **Authentication**: Laravel Sanctum v4
+- **Code Style**: Laravel Pint
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   composer install
+   npm install
+   ```
+3. Copy `.env.example` to `.env` and configure your database
+4. Generate application key:
+   ```bash
+   php artisan key:generate
+   ```
+5. Run migrations:
+   ```bash
+   php artisan migrate
+   ```
+6. **Access the application**
+
+   (If using `php artisan serve` instead, it will be at `http://localhost:8000`)
+
+## API Documentation
+
+This API includes interactive Swagger/OpenAPI documentation with dark mode. Visit:
+
+**Swagger UI**: `http://laravel1.test/api/documentation`
+
+(If using `php artisan serve`, use `http://localhost:8000/api/documentation`)
+
+The documentation provides:
+- Modern dark mode UI with enhanced color scheme
+- Interactive API testing interface
+- Complete endpoint documentation with detailed examples
+- Request/response schemas with validation rules
+- Try-it-out functionality with pre-filled examples
+- Code samples in multiple languages
+- Enhanced visual design with better contrast and readability
+
+To regenerate the documentation after making changes:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+## Testing
+
+Run the test suite using Pest:
+
+```bash
+php artisan test
+```
+
+## Project Structure
+
+- `app/Models/` - Eloquent models (Project, Task, Comment, Book, Product, Category)
+- `app/Models/Schemas/` - OpenAPI schema definitions for Swagger documentation
+- `app/Http/Controllers/` - API controllers with OpenAPI annotations (ProjectController, BookController, ProductController, CategoryController, etc.)
+- `app/Http/Requests/` - Form request validation classes with custom error messages
+- `database/migrations/` - Database schema migrations
+- `database/factories/` - Model factories for testing
+- `routes/api.php` - API route definitions
+- `tests/` - Pest test files
+
+## Validation
+
+All API endpoints use Laravel Form Request classes for validation with custom error messages. The following Form Request classes are included:
+
+- **StoreTaskRequest** / **UpdateTaskRequest** - Validates task data (title, details, status, priority, due_date)
+- **StoreProjectRequest** / **UpdateProjectRequest** - Validates project data (name, description, dates, status)
+- **StoreCommentRequest** / **UpdateCommentRequest** - Validates comment data (comment_text, author)
+- **StoreBookRequest** / **UpdateBookRequest** - Validates book data (title, author, publication_year)
+- **StoreProductRequest** / **UpdateProductRequest** - Validates product data (name, price, quantity, description)
+- **StoreCategoryRequest** / **UpdateCategoryRequest** - Validates category data (name, price, description)
+- **ReduceStockRequest** - Validates stock reduction amount
+
+All validation rules include custom, user-friendly error messages that provide clear feedback when validation fails.
+
+## Additional Features
+
+This application also includes additional API modules:
+
+### Books API
+A complete CRUD API for managing books with title, author, and publication year validation (4-digit year validation with range 1000-9999).
+
+### Products API
+A complete CRUD API for managing products with inventory management capabilities, including:
+- Product creation and management
+- Stock quantity tracking
+- Stock reduction functionality with validation
+
+### Categories API
+A complete CRUD API for managing categories with name, price, and description fields. Categories support decimal pricing with 2 decimal places.
+
