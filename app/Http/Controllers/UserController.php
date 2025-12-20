@@ -68,6 +68,47 @@ class UserController extends Controller
     }
 
     #[OA\Get(
+        path: '/api/users/{user}',
+        summary: 'Get a single user',
+        description: 'Retrieves detailed information about a specific user by ID',
+        tags: ['Users'],
+        parameters: [
+            new OA\Parameter(
+                name: 'user',
+                in: 'path',
+                required: true,
+                description: 'User ID',
+                schema: new OA\Schema(type: 'integer'),
+                example: 1
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'User details',
+                content: new OA\JsonContent(ref: '#/components/schemas/User')
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'No query results for model [App\\Models\\User] 999'),
+                    ]
+                )
+            ),
+        ]
+    )]
+    public function show(User $user): JsonResponse|View
+    {
+        if ($this->wantsJson()) {
+            return response()->json($user);
+        }
+
+        return view('users.show', compact('user'));
+    }
+
+    #[OA\Get(
         path: '/api/profile',
         summary: 'Get authenticated user profile',
         description: 'Retrieves the profile information of the authenticated user',

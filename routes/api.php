@@ -18,6 +18,7 @@ if (! defined('BOOK_ROUTE_PARAM')) {
     define('PROJECT_ROUTE_PARAM', '/{project}');
     define('TASK_ROUTE_PARAM', '/{task}');
     define('COMMENT_ROUTE_PARAM', '/{comment}');
+    define('USER_ROUTE_PARAM', '/{user}');
 }
 
 Route::get('/user', function (Request $request) {
@@ -83,4 +84,9 @@ Route::controller(TaskCommentController::class)->prefix('tasks/{task}/comments')
     Route::put(COMMENT_ROUTE_PARAM, 'update');
     Route::patch(COMMENT_ROUTE_PARAM, 'update');
     Route::delete(COMMENT_ROUTE_PARAM, 'destroy');
+});
+
+Route::controller(UserController::class)->prefix('users')->group(function () {
+    Route::get('/', 'index');
+    Route::get(USER_ROUTE_PARAM, 'show');
 });
