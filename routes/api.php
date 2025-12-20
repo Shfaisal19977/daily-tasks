@@ -21,10 +21,12 @@ if (! defined('BOOK_ROUTE_PARAM')) {
     define('USER_ROUTE_PARAM', '/{user}');
 }
 
+// Authenticated User Routes
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Profile API Routes (requires authentication)
 Route::middleware('auth:sanctum')->prefix('profile')->controller(ProfileController::class)->group(function () {
     Route::get('/', 'show');
     Route::put('/', 'update');
