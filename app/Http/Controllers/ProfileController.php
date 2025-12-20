@@ -36,7 +36,7 @@ class ProfileController extends Controller
         $user = auth()->user() ?? User::first();
 
         if (!$user) {
-            if ($this->wantsJson()) {
+            if ($this->wantsJson() || request()->is('api/*')) {
                 return response()->json(['message' => 'No user found'], 404);
             }
             return redirect()->route('home')->with('error', 'No user found.');
@@ -44,7 +44,8 @@ class ProfileController extends Controller
 
         $profile = $user->profile ?? Profile::create(['user_id' => $user->id]);
 
-        if ($this->wantsJson()) {
+        // Always return JSON for API requests
+        if ($this->wantsJson() || request()->is('api/*')) {
             return response()->json($profile);
         }
 
@@ -153,7 +154,8 @@ class ProfileController extends Controller
         $profile->update($request->validated());
         $profile->refresh();
 
-        if ($this->wantsJson()) {
+        // Always return JSON for API requests
+        if ($this->wantsJson() || $request->is('api/*')) {
             return response()->json($profile);
         }
 
