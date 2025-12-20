@@ -3,89 +3,62 @@
 @section('title', 'Edit Book')
 
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('books.show', $book) }}" class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        Back to Book
-    </a>
-</div>
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-8 border-l-4 border-green-500">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-edit text-green-600 mr-3"></i>Edit Book
+        </h1>
 
-<div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
-    <div class="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 px-8 py-6">
-        <h1 class="text-3xl font-bold text-white">Edit Book</h1>
-        <p class="text-blue-100 mt-1">Update book information</p>
-    </div>
+        <form action="{{ route('books.update', $book) }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
 
-    <form action="{{ route('books.update', $book) }}" method="POST" class="p-8">
-        @csrf
-        @method('PUT')
-
-        <div class="space-y-6">
+            <!-- Title -->
             <div>
-                <label for="title" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Title <span class="text-red-500">*</span>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-book mr-2 text-green-500"></i>Book Title
                 </label>
                 <input type="text" name="title" id="title" value="{{ old('title', $book->title) }}" required
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Enter book title">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('title') border-red-500 @enderror">
                 @error('title')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
+            <!-- Author -->
             <div>
-                <label for="author" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Author <span class="text-red-500">*</span>
+                <label for="author" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-user mr-2 text-green-500"></i>Author
                 </label>
                 <input type="text" name="author" id="author" value="{{ old('author', $book->author) }}" required
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="Enter author name">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('author') border-red-500 @enderror">
                 @error('author')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
+            <!-- Publication Year -->
             <div>
-                <label for="publication_year" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Publication Year <span class="text-red-500">*</span>
+                <label for="publication_year" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-calendar mr-2 text-green-500"></i>Publication Year
                 </label>
-                <input type="number" name="publication_year" id="publication_year" value="{{ old('publication_year', $book->publication_year) }}" required min="1000" max="9999"
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="YYYY">
+                <input type="number" name="publication_year" id="publication_year" value="{{ old('publication_year', $book->publication_year) }}" min="1000" max="9999" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('publication_year') border-red-500 @enderror">
                 @error('publication_year')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="flex gap-4 pt-4">
-                <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 font-semibold">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Update Book
+            <!-- Form Actions -->
+            <div class="flex space-x-4 pt-4">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition transform hover:scale-105 font-medium">
+                    <i class="fas fa-save mr-2"></i>Update Book
                 </button>
-                <a href="{{ route('books.show', $book) }}" class="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-semibold">
-                    Cancel
+                <a href="{{ route('books.show', $book) }}" class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition text-center font-medium">
+                    <i class="fas fa-times mr-2"></i>Cancel
                 </a>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 @endsection

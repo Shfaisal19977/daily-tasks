@@ -3,238 +3,223 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<!-- Stats Overview -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-    @php
-        $userIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>';
-        $bookIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
-        $categoryIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>';
-        $productIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>';
-        $projectIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>';
-    @endphp
-
-    <x-stat-card
-        title="Users"
-        :value="$stats['users']"
-        color="indigo"
-        :icon="$userIcon"
-        :link="route('users.index')"
-    />
-
-    <x-stat-card
-        title="Total Books"
-        :value="$stats['books']"
-        color="blue"
-        :icon="$bookIcon"
-        :link="route('books.index')"
-    />
-
-    <x-stat-card
-        title="Categories"
-        :value="$stats['categories']"
-        color="green"
-        :icon="$categoryIcon"
-        :link="route('categories.index')"
-    />
-
-    <x-stat-card
-        title="Products"
-        :value="$stats['products']"
-        color="purple"
-        :icon="$productIcon"
-        :link="route('products.index')"
-        :extra-info="$stats['low_stock_products'] > 0 ? $stats['low_stock_products'] . ' low stock' : null"
-    />
-
-    <x-stat-card
-        title="Projects"
-        :value="$stats['projects']"
-        color="orange"
-        :icon="$projectIcon"
-        :link="route('projects.index')"
-        :extra-info="$stats['tasks'] . ' tasks'"
-    />
-</div>
-
-<!-- Quick Actions -->
-<div class="mb-8">
-    <h2 class="text-2xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-4">Quick Actions</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="{{ route('books.create') }}" class="group bg-white dark:bg-[#161615] rounded-lg border-2 border-[#e3e3e0] dark:border-[#3E3E3A] p-5 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-lg transition-all">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-2 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Add Book</p>
-                    <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">Create new book</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="{{ route('products.create') }}" class="group bg-white dark:bg-[#161615] rounded-lg border-2 border-[#e3e3e0] dark:border-[#3E3E3A] p-5 hover:border-purple-500 dark:hover:border-purple-500 hover:shadow-lg transition-all">
-            <div class="flex items-center gap-3">
-                <div class="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-2 group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors">
-                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Add Product</p>
-                    <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">Add to inventory</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="{{ route('projects.create') }}" class="group bg-white dark:bg-[#161615] rounded-lg border-2 border-[#e3e3e0] dark:border-[#3E3E3A] p-5 hover:border-orange-500 dark:hover:border-orange-500 hover:shadow-lg transition-all">
-            <div class="flex items-center gap-3">
-                <div class="bg-orange-100 dark:bg-orange-900/30 rounded-lg p-2 group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50 transition-colors">
-                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">New Project</p>
-                    <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">Start a project</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="{{ route('categories.create') }}" class="group bg-white dark:bg-[#161615] rounded-lg border-2 border-[#e3e3e0] dark:border-[#3E3E3A] p-5 hover:border-green-500 dark:hover:border-green-500 hover:shadow-lg transition-all">
-            <div class="flex items-center gap-3">
-                <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-2 group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors">
-                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </div>
-                <div>
-                    <p class="font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">New Category</p>
-                    <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">Create category</p>
-                </div>
-            </div>
-        </a>
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+        <h1 class="text-3xl font-bold text-gray-800">
+            <i class="fas fa-chart-line text-purple-600 mr-3"></i>Dashboard Overview
+        </h1>
+        <p class="text-gray-600 mt-2">Welcome to your project management dashboard</p>
     </div>
-</div>
 
-<!-- Recent Activity -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Recent Users -->
-    <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
-        <div class="p-6 border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Users Card -->
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Recent Users</h3>
-                <a href="{{ route('users.index') }}" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">View all</a>
+                <div>
+                    <p class="text-blue-100 text-sm font-medium">Total Users</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['users']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
             </div>
         </div>
-        <div class="p-6">
-            @if($recentUsers->isEmpty())
-                <p class="text-[#706f6c] dark:text-[#A1A09A] text-center py-4">No users yet</p>
-            @else
-                <div class="space-y-3">
-                    @foreach($recentUsers as $user)
-                        <div class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-colors group">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                                        <span class="text-indigo-600 dark:text-indigo-400 font-semibold text-sm">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-[#1b1b18] dark:text-[#EDEDEC] group-hover:text-indigo-600 dark:group-hover:text-indigo-400">{{ $user->name }}</p>
-                                        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $user->email }}</p>
-                                    </div>
-                                </div>
-                            </div>
+
+        <!-- Books Card -->
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm font-medium">Total Books</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['books']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-book text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Card -->
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100 text-sm font-medium">Total Projects</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['projects']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-project-diagram text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Card -->
+        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-orange-100 text-sm font-medium">Total Products</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['products']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-box text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Card -->
+        <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-pink-100 text-sm font-medium">Total Categories</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['categories']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-tags text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Card -->
+        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-indigo-100 text-sm font-medium">Total Tasks</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['tasks']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-tasks text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Card -->
+        <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-teal-100 text-sm font-medium">Total Comments</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['comments']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-comments text-3xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Alert Card -->
+        <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-red-100 text-sm font-medium">Low Stock Products</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($stats['low_stock_products']) }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-4">
+                    <i class="fas fa-exclamation-triangle text-3xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Value Card -->
+    <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-xl shadow-lg p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-yellow-100 text-sm font-medium">Total Inventory Value</p>
+                <p class="text-4xl font-bold mt-2">${{ number_format($stats['total_inventory_value'], 2) }}</p>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-full p-4">
+                <i class="fas fa-dollar-sign text-4xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Users -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-users text-blue-600 mr-2"></i>Recent Users
+            </h2>
+            <div class="space-y-3">
+                @forelse($recentUsers as $user)
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition">
+                        <div class="bg-blue-500 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold">
+                            {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
-                    @endforeach
-                </div>
-            @endif
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-800">{{ $user->name }}</p>
+                            <p class="text-sm text-gray-500">{{ $user->email }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-4">No users yet</p>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Recent Books -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-book text-green-600 mr-2"></i>Recent Books
+            </h2>
+            <div class="space-y-3">
+                @forelse($recentBooks as $book)
+                    <div class="p-3 bg-gray-50 rounded-lg hover:bg-green-50 transition">
+                        <p class="font-medium text-gray-800">{{ $book->title }}</p>
+                        <p class="text-sm text-gray-500">by {{ $book->author }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ $book->publication_year }}</p>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-4">No books yet</p>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Recent Projects -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-project-diagram text-purple-600 mr-2"></i>Recent Projects
+            </h2>
+            <div class="space-y-3">
+                @forelse($recentProjects as $project)
+                    <div class="p-3 bg-gray-50 rounded-lg hover:bg-purple-50 transition">
+                        <p class="font-medium text-gray-800">{{ $project->name }}</p>
+                        <p class="text-sm text-gray-500 line-clamp-2">{{ Str::limit($project->description, 50) }}</p>
+                        <div class="flex items-center mt-2">
+                            <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
+                                {{ $project->tasks->count() }} tasks
+                            </span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-4">No projects yet</p>
+                @endforelse
+            </div>
         </div>
     </div>
 
-    <!-- Recent Books -->
-    <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
-        <div class="p-6 border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Recent Books</h3>
-                <a href="{{ route('books.index') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">View all</a>
-            </div>
-        </div>
-        <div class="p-6">
-            @if($recentBooks->isEmpty())
-                <p class="text-[#706f6c] dark:text-[#A1A09A] text-center py-4">No books yet</p>
-            @else
-                <div class="space-y-3">
-                    @foreach($recentBooks as $book)
-                        <a href="{{ route('books.show', $book) }}" class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-colors group">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="font-medium text-[#1b1b18] dark:text-[#EDEDEC] group-hover:text-blue-600 dark:group-hover:text-blue-400">{{ $book->title }}</p>
-                                    <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $book->author }} • {{ $book->publication_year }}</p>
-                                </div>
-                                <svg class="w-5 h-5 text-[#706f6c] dark:text-[#A1A09A] group-hover:text-blue-600 dark:group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Recent Projects -->
-    <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
-        <div class="p-6 border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Recent Projects</h3>
-                <a href="{{ route('projects.index') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">View all</a>
-            </div>
-        </div>
-        <div class="p-6">
-            @if($recentProjects->isEmpty())
-                <p class="text-[#706f6c] dark:text-[#A1A09A] text-center py-4">No projects yet</p>
-            @else
-                <div class="space-y-3">
-                    @foreach($recentProjects as $project)
-                        <a href="{{ route('projects.show', $project) }}" class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-colors group">
-                            <div class="flex items-center justify-between">
-                                <div class="flex-1">
-                                    <p class="font-medium text-[#1b1b18] dark:text-[#EDEDEC] group-hover:text-blue-600 dark:group-hover:text-blue-400">{{ $project->name }}</p>
-                                    <div class="flex items-center gap-2 mt-1">
-                                        @if($project->status)
-                                            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">{{ $project->status }}</span>
-                                        @endif
-                                        <span class="text-xs text-[#706f6c] dark:text-[#A1A09A]">{{ $project->tasks->count() }} tasks</span>
-                                    </div>
-                                </div>
-                                <svg class="w-5 h-5 text-[#706f6c] dark:text-[#A1A09A] group-hover:text-blue-600 dark:group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            @endif
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-bolt text-yellow-600 mr-2"></i>Quick Actions
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="{{ route('projects.create') }}" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-lg text-center hover:from-purple-600 hover:to-purple-700 transition transform hover:scale-105">
+                <i class="fas fa-plus text-2xl mb-2"></i>
+                <p class="font-medium">New Project</p>
+            </a>
+            <a href="{{ route('books.create') }}" class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg text-center hover:from-green-600 hover:to-green-700 transition transform hover:scale-105">
+                <i class="fas fa-plus text-2xl mb-2"></i>
+                <p class="font-medium">New Book</p>
+            </a>
+            <a href="{{ route('products.create') }}" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-lg text-center hover:from-orange-600 hover:to-orange-700 transition transform hover:scale-105">
+                <i class="fas fa-plus text-2xl mb-2"></i>
+                <p class="font-medium">New Product</p>
+            </a>
+            <a href="{{ route('categories.create') }}" class="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-4 rounded-lg text-center hover:from-pink-600 hover:to-pink-700 transition transform hover:scale-105">
+                <i class="fas fa-plus text-2xl mb-2"></i>
+                <p class="font-medium">New Category</p>
+            </a>
         </div>
     </div>
 </div>
-
-<!-- Inventory Value -->
-@if($stats['total_inventory_value'] > 0)
-<div class="mt-6 bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 rounded-xl shadow-lg p-6 text-white">
-    <div class="flex items-center justify-between">
-        <div>
-            <p class="text-indigo-100 text-sm font-medium mb-1">Total Inventory Value</p>
-            <p class="text-3xl font-bold">${{ number_format($stats['total_inventory_value'], 2) }}</p>
-        </div>
-        <div class="bg-white/20 rounded-lg p-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-    </div>
-</div>
-@endif
 @endsection

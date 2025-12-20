@@ -30,6 +30,13 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+
+Route::prefix('profile')->name('profile.')->controller(\App\Http\Controllers\ProfileController::class)->group(function () {
+    Route::get('/', 'show')->name('show');
+    Route::get('/edit', 'edit')->name('edit');
+    Route::put('/', 'update')->name('update');
+    Route::patch('/', 'update');
+});
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('products', ProductController::class);

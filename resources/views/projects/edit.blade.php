@@ -3,128 +3,91 @@
 @section('title', 'Edit Project')
 
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        Back to Project
-    </a>
-</div>
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-8 border-l-4 border-purple-500">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-edit text-purple-600 mr-3"></i>Edit Project
+        </h1>
 
-<div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
-    <div class="bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700 px-8 py-6">
-        <h1 class="text-3xl font-bold text-white">Edit Project</h1>
-        <p class="text-orange-100 mt-1">Update project information</p>
-    </div>
+        <form action="{{ route('projects.update', $project) }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
 
-    <form action="{{ route('projects.update', $project) }}" method="POST" class="p-8">
-        @csrf
-        @method('PUT')
-
-        <div class="space-y-6">
+            <!-- Name -->
             <div>
-                <label for="name" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Project Name <span class="text-red-500">*</span>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-tag mr-2 text-purple-500"></i>Project Name
                 </label>
                 <input type="text" name="name" id="name" value="{{ old('name', $project->name) }}" required
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
-                    placeholder="Enter project name">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('name') border-red-500 @enderror">
                 @error('name')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
+            <!-- Description -->
             <div>
-                <label for="description" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Description
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-align-left mr-2 text-purple-500"></i>Description
                 </label>
-                <textarea name="description" id="description" rows="4"
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none"
-                    placeholder="Enter project description (optional)">{{ old('description', $project->description) }}</textarea>
+                <textarea name="description" id="description" rows="4" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('description') border-red-500 @enderror">{{ old('description', $project->description) }}</textarea>
                 @error('description')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="start_date" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                        Start Date
-                    </label>
-                    <input type="date" name="start_date" id="start_date" value="{{ old('start_date', $project->start_date) }}"
-                        class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
-                    @error('start_date')
-                        <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="end_date" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                        End Date
-                    </label>
-                    <input type="date" name="end_date" id="end_date" value="{{ old('end_date', $project->end_date) }}"
-                        class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
-                    @error('end_date')
-                        <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            <!-- Start Date -->
+            <div>
+                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-calendar-alt mr-2 text-purple-500"></i>Start Date
+                </label>
+                <input type="date" name="start_date" id="start_date" value="{{ old('start_date', $project->start_date?->format('Y-m-d')) }}" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('start_date') border-red-500 @enderror">
+                @error('start_date')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
+            <!-- End Date -->
             <div>
-                <label for="status" class="block text-sm font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                    Status
+                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-calendar-check mr-2 text-purple-500"></i>End Date
                 </label>
-                <select name="status" id="status"
-                    class="w-full px-4 py-3 border-2 border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
-                    <option value="">Select status</option>
-                    <option value="planned" {{ old('status', $project->status) == 'planned' ? 'selected' : '' }}>Planned</option>
-                    <option value="in_progress" {{ old('status', $project->status) == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                    <option value="completed" {{ old('status', $project->status) == 'completed' ? 'selected' : '' }}>Completed</option>
-                    <option value="on_hold" {{ old('status', $project->status) == 'on_hold' ? 'selected' : '' }}>On Hold</option>
+                <input type="date" name="end_date" id="end_date" value="{{ old('end_date', $project->end_date?->format('Y-m-d')) }}" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('end_date') border-red-500 @enderror">
+                @error('end_date')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Status -->
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-info-circle mr-2 text-purple-500"></i>Status
+                </label>
+                <select name="status" id="status" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('status') border-red-500 @enderror">
+                    <option value="planned" {{ old('status', $project->status) === 'planned' ? 'selected' : '' }}>Planned</option>
+                    <option value="in_progress" {{ old('status', $project->status) === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                    <option value="completed" {{ old('status', $project->status) === 'completed' ? 'selected' : '' }}>Completed</option>
+                    <option value="on_hold" {{ old('status', $project->status) === 'on_hold' ? 'selected' : '' }}>On Hold</option>
                 </select>
                 @error('status')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $message }}
-                    </p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="flex gap-4 pt-4">
-                <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 font-semibold">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Update Project
+            <!-- Form Actions -->
+            <div class="flex space-x-4 pt-4">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition transform hover:scale-105 font-medium">
+                    <i class="fas fa-save mr-2"></i>Update Project
                 </button>
-                <a href="{{ route('projects.show', $project) }}" class="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-semibold">
-                    Cancel
+                <a href="{{ route('projects.show', $project) }}" class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition text-center font-medium">
+                    <i class="fas fa-times mr-2"></i>Cancel
                 </a>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 @endsection

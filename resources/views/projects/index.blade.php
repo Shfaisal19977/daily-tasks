@@ -3,89 +3,85 @@
 @section('title', 'Projects')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex justify-between items-center bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
         <div>
-            <h1 class="text-3xl font-bold text-[#1b1b18] dark:text-[#EDEDEC]">Projects</h1>
-            <p class="text-[#706f6c] dark:text-[#A1A09A] mt-1">Manage your projects and tasks</p>
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-project-diagram text-purple-600 mr-3"></i>Projects
+            </h1>
+            <p class="text-gray-600 mt-2">Manage your projects and track progress</p>
         </div>
-        <a href="{{ route('projects.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 font-medium">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Add New Project
+        <a href="{{ route('projects.create') }}" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition transform hover:scale-105 shadow-lg">
+            <i class="fas fa-plus mr-2"></i>New Project
         </a>
     </div>
-</div>
 
-@if($projects->isEmpty())
-    <div class="bg-white dark:bg-[#161615] rounded-xl border-2 border-dashed border-[#e3e3e0] dark:border-[#3E3E3A] p-12 text-center">
-        <svg class="w-16 h-16 mx-auto text-[#706f6c] dark:text-[#A1A09A] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-        </svg>
-        <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">No projects found</h3>
-        <p class="text-[#706f6c] dark:text-[#A1A09A] mb-4">Create your first project to get started</p>
-        <a href="{{ route('projects.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Create Project
-        </a>
-    </div>
-@else
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($projects as $project)
-            <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group">
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                                <a href="{{ route('projects.show', $project) }}">{{ $project->name }}</a>
-                            </h3>
-                            @if($project->status)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                                    {{ $project->status }}
-                                </span>
-                            @endif
+    <!-- Projects Grid -->
+    @if($projects->count() > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($projects as $project)
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-200 overflow-hidden border-t-4 border-purple-500">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <h3 class="text-xl font-bold text-gray-800 line-clamp-1">{{ $project->name }}</h3>
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full 
+                                @if($project->status === 'completed') bg-green-100 text-green-800
+                                @elseif($project->status === 'in_progress') bg-blue-100 text-blue-800
+                                @elseif($project->status === 'planned') bg-yellow-100 text-yellow-800
+                                @else bg-gray-100 text-gray-800
+                                @endif">
+                                {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                            </span>
                         </div>
-                    </div>
-                    
-                    @if($project->description)
-                        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-4 line-clamp-2">{{ $project->description }}</p>
-                    @endif
-
-                    <div class="flex items-center gap-4 mb-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                            <span>{{ $project->tasks->count() }} tasks</span>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ $project->description }}</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-calendar-alt mr-2 text-purple-500"></i>
+                                <span>Start: {{ $project->start_date ? $project->start_date->format('M d, Y') : 'N/A' }}</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-calendar-check mr-2 text-purple-500"></i>
+                                <span>End: {{ $project->end_date ? $project->end_date->format('M d, Y') : 'N/A' }}</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-tasks mr-2 text-purple-500"></i>
+                                <span>{{ $project->tasks->count() }} tasks</span>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="flex gap-2 pt-4 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
-                        <a href="{{ route('projects.show', $project) }}" class="flex-1 text-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors font-medium text-sm">
-                            View
-                        </a>
-                        <a href="{{ route('projects.edit', $project) }}" class="flex-1 text-center px-4 py-2 bg-gray-50 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900/40 transition-colors font-medium text-sm">
-                            Edit
-                        </a>
-                        <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium text-sm">
-                                Delete
-                            </button>
-                        </form>
+                        <div class="flex space-x-2">
+                            <a href="{{ route('projects.show', $project) }}" class="flex-1 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition text-center text-sm font-medium">
+                                <i class="fas fa-eye mr-1"></i>View
+                            </a>
+                            <a href="{{ route('projects.edit', $project) }}" class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-center text-sm font-medium">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </a>
+                            <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm font-medium">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-    @if($projects->hasPages())
-        <div class="mt-6">
+            @endforeach
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-white rounded-xl shadow-lg p-4">
             {{ $projects->links() }}
         </div>
+    @else
+        <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+            <i class="fas fa-project-diagram text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-600 mb-2">No Projects Yet</h3>
+            <p class="text-gray-500 mb-6">Get started by creating your first project</p>
+            <a href="{{ route('projects.create') }}" class="inline-block bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition transform hover:scale-105">
+                <i class="fas fa-plus mr-2"></i>Create Project
+            </a>
+        </div>
     @endif
-@endif
+</div>
 @endsection

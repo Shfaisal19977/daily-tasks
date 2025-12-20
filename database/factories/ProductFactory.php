@@ -20,7 +20,7 @@ class ProductFactory extends Factory
             'name' => fake()->words(3, true),
             'price' => fake()->randomFloat(2, 1, 1000),
             'quantity' => fake()->numberBetween(0, 100),
-            'description' => fake()->optional()->paragraph(),
+            'description' => fake()->paragraph(),
         ];
     }
 }

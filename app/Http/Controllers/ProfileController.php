@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -10,79 +11,27 @@ use Illuminate\View\View;
 use OpenApi\Attributes as OA;
 
 #[OA\Tag(
-    name: 'Users',
-    description: 'User management endpoints'
+    name: 'Profiles',
+    description: 'User profile management endpoints'
 )]
-class UserController extends Controller
+class ProfileController extends Controller
 {
-    #[OA\Get(
-        path: '/api/users',
-        summary: 'Get all users',
-        tags: ['Users'],
-        parameters: [
-            new OA\Parameter(
-                name: 'per_page',
-                in: 'query',
-                required: false,
-                description: 'Number of items per page',
-                schema: new OA\Schema(type: 'integer', default: 15)
-            ),
-            new OA\Parameter(
-                name: 'page',
-                in: 'query',
-                required: false,
-                description: 'Page number',
-                schema: new OA\Schema(type: 'integer', default: 1)
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Paginated list of users',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/User')),
-                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
-                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
-                        new OA\Property(property: 'total', type: 'integer', example: 100),
-                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
-                        new OA\Property(property: 'from', type: 'integer', example: 1),
-                        new OA\Property(property: 'to', type: 'integer', example: 15),
-                    ]
-                )
-            ),
-        ]
-    )]
-    public function index(): JsonResponse|View
-    {
-        $perPage = request()->get('per_page', 15);
-        $users = User::query()
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-
-        if ($this->wantsJson()) {
-            return response()->json($users);
-        }
-
-        return view('users.index', compact('users'));
-    }
-
     #[OA\Get(
         path: '/api/profile',
         summary: 'Get authenticated user profile',
         description: 'Retrieves the profile information of the authenticated user',
-        tags: ['Users'],
+        tags: ['Profiles'],
         security: [['sanctum' => []]],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'User profile details',
-                content: new OA\JsonContent(ref: '#/components/schemas/User')
+                content: new OA\JsonContent(ref: '#/components/schemas/Profile')
             ),
             new OA\Response(response: 401, description: 'Unauthenticated'),
         ]
     )]
-    public function showProfile(): JsonResponse|View|RedirectResponse
+    public function show(): JsonResponse|View|RedirectResponse
     {
         $user = auth()->user() ?? User::first();
 
@@ -93,18 +42,33 @@ class UserController extends Controller
             return redirect()->route('home')->with('error', 'No user found.');
         }
 
+        $profile = $user->profile ?? Profile::create(['user_id' => $user->id]);
+
         if ($this->wantsJson()) {
-            return response()->json($user);
+            return response()->json($profile);
         }
 
-        return view('users.profile', compact('user'));
+        return view('users.profile', compact('user', 'profile'));
+    }
+
+    public function edit(): View|RedirectResponse
+    {
+        $user = auth()->user() ?? User::first();
+
+        if (!$user) {
+            return redirect()->route('home')->with('error', 'No user found.');
+        }
+
+        $profile = $user->profile ?? Profile::create(['user_id' => $user->id]);
+
+        return view('users.edit-profile', compact('user', 'profile'));
     }
 
     #[OA\Put(
         path: '/api/profile',
         summary: 'Update authenticated user profile',
         description: 'Updates the profile information of the authenticated user',
-        tags: ['Users'],
+        tags: ['Profiles'],
         security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
@@ -125,7 +89,7 @@ class UserController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Profile updated successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/User')
+                content: new OA\JsonContent(ref: '#/components/schemas/Profile')
             ),
             new OA\Response(
                 response: 422,
@@ -144,7 +108,7 @@ class UserController extends Controller
         path: '/api/profile',
         summary: 'Update authenticated user profile',
         description: 'Updates the profile information of the authenticated user',
-        tags: ['Users'],
+        tags: ['Profiles'],
         security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
@@ -165,7 +129,7 @@ class UserController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Profile updated successfully',
-                content: new OA\JsonContent(ref: '#/components/schemas/User')
+                content: new OA\JsonContent(ref: '#/components/schemas/Profile')
             ),
             new OA\Response(
                 response: 422,
@@ -174,7 +138,7 @@ class UserController extends Controller
             new OA\Response(response: 401, description: 'Unauthenticated'),
         ]
     )]
-    public function updateProfile(UpdateProfileRequest $request): JsonResponse|RedirectResponse
+    public function update(UpdateProfileRequest $request): JsonResponse|RedirectResponse
     {
         $user = auth()->user() ?? User::first();
 
@@ -185,24 +149,14 @@ class UserController extends Controller
             return redirect()->route('home')->with('error', 'No user found.');
         }
 
-        $user->update($request->validated());
-        $user->refresh();
+        $profile = $user->profile ?? Profile::create(['user_id' => $user->id]);
+        $profile->update($request->validated());
+        $profile->refresh();
 
         if ($this->wantsJson()) {
-            return response()->json($user);
+            return response()->json($profile);
         }
 
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
-    }
-
-    public function editProfile(): View|RedirectResponse
-    {
-        $user = auth()->user() ?? User::first();
-
-        if (!$user) {
-            return redirect()->route('home')->with('error', 'No user found.');
-        }
-
-        return view('users.edit-profile', compact('user'));
     }
 }

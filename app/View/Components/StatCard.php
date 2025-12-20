@@ -38,37 +38,11 @@ class StatCard extends Component
      */
     public function getColorClasses(): array
     {
-        return match($this->color) {
-            'blue' => [
-                'bg' => 'from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700',
-                'text' => 'text-blue-100',
-                'iconBg' => 'bg-white/20',
-            ],
-            'green' => [
-                'bg' => 'from-green-500 to-green-600 dark:from-green-600 dark:to-green-700',
-                'text' => 'text-green-100',
-                'iconBg' => 'bg-white/20',
-            ],
-            'purple' => [
-                'bg' => 'from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700',
-                'text' => 'text-purple-100',
-                'iconBg' => 'bg-white/20',
-            ],
-            'orange' => [
-                'bg' => 'from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700',
-                'text' => 'text-orange-100',
-                'iconBg' => 'bg-white/20',
-            ],
-            'indigo' => [
-                'bg' => 'from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700',
-                'text' => 'text-indigo-100',
-                'iconBg' => 'bg-white/20',
-            ],
-            default => [
-                'bg' => 'from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700',
-                'text' => 'text-blue-100',
-                'iconBg' => 'bg-white/20',
-            ],
-        };
+        // All stat cards use the same color palette
+        return [
+            'bg' => 'from-[#DCD6F7] to-[#F4EEFF]',
+            'text' => 'text-[#424874]',
+            'iconBg' => 'bg-[#A6B1E1]',
+        ];
     }
 }

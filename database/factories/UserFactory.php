@@ -33,6 +33,16 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the user should have a profile.
+     */
+    public function withProfile(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            \App\Models\Profile::factory()->create(['user_id' => $user->id]);
+        });
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

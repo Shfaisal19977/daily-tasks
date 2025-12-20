@@ -3,9 +3,11 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,12 @@ if (! defined('BOOK_ROUTE_PARAM')) {
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->prefix('profile')->controller(ProfileController::class)->group(function () {
+    Route::get('/', 'show');
+    Route::put('/', 'update');
+    Route::patch('/', 'update');
+});
 
 Route::controller(BookController::class)->prefix('books')->group(function () {
     Route::get('/', 'index');
