@@ -44,7 +44,7 @@
                         <a href="{{ route('users.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('users.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
                             <i class="fas fa-users mr-2"></i>Users
                         </a>
-                        <a href="{{ route('profile.show') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('profile.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
+                        <a href="{{ route('profile') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('profile.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
                             <i class="fas fa-user-circle mr-2"></i>Profile
                         </a>
                     </div>

@@ -34,12 +34,16 @@ Route::get('/', function () {
 
 Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 
+// Profile routes
 Route::prefix('profile')->name('profile.')->controller(\App\Http\Controllers\ProfileController::class)->group(function () {
     Route::get('/', 'show')->name('show');
     Route::get('/edit', 'edit')->name('edit');
     Route::put('/', 'update')->name('update');
     Route::patch('/', 'update');
 });
+
+// Alias 'profile' route name to 'profile.show' for compatibility
+Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('posts', PostController::class);

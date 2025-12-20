@@ -157,6 +157,6 @@ class ProfileController extends Controller
             return response()->json($profile);
         }
 
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
+        return redirect()->route('profile')->with('success', 'Profile updated successfully.');
     }
 }

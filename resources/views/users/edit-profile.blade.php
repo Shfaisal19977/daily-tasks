@@ -102,7 +102,7 @@
                 <button type="submit" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition transform hover:scale-105 font-medium">
                     <i class="fas fa-save mr-2"></i>Update Profile
                 </button>
-                <a href="{{ route('profile.show') }}" class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition text-center font-medium">
+                <a href="{{ route('profile') }}" class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition text-center font-medium">
                     <i class="fas fa-times mr-2"></i>Cancel
                 </a>
             </div>
