@@ -11,7 +11,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen">
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,12 +74,12 @@
     @endif
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         @yield('content')
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white mt-12">
+    <footer class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <p class="text-center text-sm">
                 &copy; {{ date('Y') }} Daily Tasks - Project Management System
