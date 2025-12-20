@@ -21,22 +21,46 @@ class ProductController extends Controller
         path: '/api/products',
         summary: 'Get all products',
         tags: ['Products'],
+        parameters: [
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of products',
+                description: 'Paginated list of products',
                 content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Product')
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Product')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
                 )
             ),
         ]
     )]
     public function index(): JsonResponse|View
     {
+        $perPage = request()->get('per_page', 15);
         $products = Product::query()
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         if ($this->wantsJson()) {
             return response()->json($products);

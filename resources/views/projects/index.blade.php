@@ -70,10 +70,22 @@
                         <a href="{{ route('projects.edit', $project) }}" class="flex-1 text-center px-4 py-2 bg-gray-50 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900/40 transition-colors font-medium text-sm">
                             Edit
                         </a>
+                        <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium text-sm">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
+    @if($projects->hasPages())
+        <div class="mt-6">
+            {{ $projects->links() }}
+        </div>
+    @endif
 @endif
 @endsection

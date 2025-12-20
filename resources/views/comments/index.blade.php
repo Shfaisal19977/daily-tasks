@@ -78,5 +78,10 @@
             </div>
         @endforeach
     </div>
+    @if($comments->hasPages())
+        <div class="mt-6">
+            {{ $comments->links() }}
+        </div>
+    @endif
 @endif
 @endsection

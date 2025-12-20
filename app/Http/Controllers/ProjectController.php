@@ -20,23 +20,47 @@ class ProjectController extends Controller
         path: '/api/projects',
         summary: 'Get all projects',
         tags: ['Projects'],
+        parameters: [
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of projects',
+                description: 'Paginated list of projects',
                 content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Project')
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Project')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
                 )
             ),
         ]
     )]
     public function index(): JsonResponse|View
     {
+        $perPage = request()->get('per_page', 15);
         $projects = Project::query()
             ->with('tasks.comments')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         if ($this->wantsJson()) {
             return response()->json($projects);

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $stats = [
+        'users' => \App\Models\User::count(),
         'books' => \App\Models\Book::count(),
         'categories' => \App\Models\Category::count(),
         'products' => \App\Models\Product::count(),
@@ -21,12 +22,14 @@ Route::get('/', function () {
         'total_inventory_value' => \App\Models\Product::sum(DB::raw('price * quantity')),
     ];
 
+    $recentUsers = \App\Models\User::latest()->take(5)->get();
     $recentBooks = \App\Models\Book::latest()->take(5)->get();
     $recentProjects = \App\Models\Project::with('tasks')->latest()->take(5)->get();
 
-    return view('home', compact('stats', 'recentBooks', 'recentProjects'));
+    return view('home', compact('stats', 'recentUsers', 'recentBooks', 'recentProjects'));
 })->name('home');
 
+Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('products', ProductController::class);

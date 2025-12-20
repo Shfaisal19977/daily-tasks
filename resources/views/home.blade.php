@@ -4,78 +4,56 @@
 
 @section('content')
 <!-- Stats Overview -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-blue-100 text-sm font-medium mb-1">Total Books</p>
-                <p class="text-3xl font-bold">{{ $stats['books'] }}</p>
-            </div>
-            <div class="bg-white/20 rounded-lg p-3">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                </svg>
-            </div>
-        </div>
-        <a href="{{ route('books.index') }}" class="text-blue-100 hover:text-white text-sm font-medium mt-4 inline-flex items-center">
-            View all <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </a>
-    </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+    @php
+        $userIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>';
+        $bookIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
+        $categoryIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>';
+        $productIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>';
+        $projectIcon = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>';
+    @endphp
 
-    <div class="bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-green-100 text-sm font-medium mb-1">Categories</p>
-                <p class="text-3xl font-bold">{{ $stats['categories'] }}</p>
-            </div>
-            <div class="bg-white/20 rounded-lg p-3">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                </svg>
-            </div>
-        </div>
-        <a href="{{ route('categories.index') }}" class="text-green-100 hover:text-white text-sm font-medium mt-4 inline-flex items-center">
-            View all <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </a>
-    </div>
+    <x-stat-card
+        title="Users"
+        :value="$stats['users']"
+        color="indigo"
+        :icon="$userIcon"
+        :link="route('users.index')"
+    />
 
-    <div class="bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-purple-100 text-sm font-medium mb-1">Products</p>
-                <p class="text-3xl font-bold">{{ $stats['products'] }}</p>
-                @if($stats['low_stock_products'] > 0)
-                    <p class="text-purple-100 text-xs mt-1">{{ $stats['low_stock_products'] }} low stock</p>
-                @endif
-            </div>
-            <div class="bg-white/20 rounded-lg p-3">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>
-            </div>
-        </div>
-        <a href="{{ route('products.index') }}" class="text-purple-100 hover:text-white text-sm font-medium mt-4 inline-flex items-center">
-            View all <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </a>
-    </div>
+    <x-stat-card
+        title="Total Books"
+        :value="$stats['books']"
+        color="blue"
+        :icon="$bookIcon"
+        :link="route('books.index')"
+    />
 
-    <div class="bg-gradient-to-br from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-orange-100 text-sm font-medium mb-1">Projects</p>
-                <p class="text-3xl font-bold">{{ $stats['projects'] }}</p>
-                <p class="text-orange-100 text-xs mt-1">{{ $stats['tasks'] }} tasks</p>
-            </div>
-            <div class="bg-white/20 rounded-lg p-3">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-            </div>
-        </div>
-        <a href="{{ route('projects.index') }}" class="text-orange-100 hover:text-white text-sm font-medium mt-4 inline-flex items-center">
-            View all <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </a>
-    </div>
+    <x-stat-card
+        title="Categories"
+        :value="$stats['categories']"
+        color="green"
+        :icon="$categoryIcon"
+        :link="route('categories.index')"
+    />
+
+    <x-stat-card
+        title="Products"
+        :value="$stats['products']"
+        color="purple"
+        :icon="$productIcon"
+        :link="route('products.index')"
+        :extra-info="$stats['low_stock_products'] > 0 ? $stats['low_stock_products'] . ' low stock' : null"
+    />
+
+    <x-stat-card
+        title="Projects"
+        :value="$stats['projects']"
+        color="orange"
+        :icon="$projectIcon"
+        :link="route('projects.index')"
+        :extra-info="$stats['tasks'] . ' tasks'"
+    />
 </div>
 
 <!-- Quick Actions -->
@@ -141,7 +119,40 @@
 </div>
 
 <!-- Recent Activity -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Recent Users -->
+    <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
+        <div class="p-6 border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">Recent Users</h3>
+                <a href="{{ route('users.index') }}" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">View all</a>
+            </div>
+        </div>
+        <div class="p-6">
+            @if($recentUsers->isEmpty())
+                <p class="text-[#706f6c] dark:text-[#A1A09A] text-center py-4">No users yet</p>
+            @else
+                <div class="space-y-3">
+                    @foreach($recentUsers as $user)
+                        <div class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-colors group">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                                        <span class="text-indigo-600 dark:text-indigo-400 font-semibold text-sm">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-[#1b1b18] dark:text-[#EDEDEC] group-hover:text-indigo-600 dark:group-hover:text-indigo-400">{{ $user->name }}</p>
+                                        <p class="text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $user->email }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
     <!-- Recent Books -->
     <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm">
         <div class="p-6 border-b border-[#e3e3e0] dark:border-[#3E3E3A]">

@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Project;
 use App\Models\User;
-use Database\Factories\TaskFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,18 +15,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create test user if it doesn't exist
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'email_verified_at' => now(),
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]
+        );
 
-        Project::factory()
-            ->count(3)
-            ->hasTasks(
-                TaskFactory::new()
-                    ->count(3)
-                    ->hasComments(2)
-            )
-            ->create();
+        // Seed all models with 1000 items each
+        $this->call([
+            UserSeeder::class,
+            BookSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class,
+            ProjectSeeder::class,
+            TaskSeeder::class,
+            CommentSeeder::class,
+        ]);
     }
 }

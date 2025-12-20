@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
         return [
             'name' => fake()->words(2, true),
             'price' => fake()->randomFloat(2, 1, 1000),
-            'description' => fake()->optional()->paragraph(),
+            'description' => fake()->optional()->sentence(),
         ];
     }
 }

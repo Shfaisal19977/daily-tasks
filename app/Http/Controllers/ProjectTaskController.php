@@ -29,14 +29,35 @@ class ProjectTaskController extends Controller
                 description: 'Project ID',
                 schema: new OA\Schema(type: 'integer')
             ),
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of tasks',
+                description: 'Paginated list of tasks',
                 content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Task')
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Task')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
                 )
             ),
             new OA\Response(response: 404, description: 'Project not found'),
@@ -44,9 +65,10 @@ class ProjectTaskController extends Controller
     )]
     public function index(Project $project): JsonResponse|View
     {
+        $perPage = request()->get('per_page', 15);
         $tasks = $project->tasks()
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
         if ($this->wantsJson()) {
             return response()->json($tasks);

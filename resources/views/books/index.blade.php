@@ -33,64 +33,50 @@
         </a>
     </div>
 @else
-    <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-50 dark:bg-[#0a0a0a] border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-[#706f6c] dark:text-[#A1A09A] uppercase tracking-wider">Title</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-[#706f6c] dark:text-[#A1A09A] uppercase tracking-wider">Author</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-[#706f6c] dark:text-[#A1A09A] uppercase tracking-wider">Year</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-[#706f6c] dark:text-[#A1A09A] uppercase tracking-wider">Created</th>
-                        <th class="px-6 py-4 text-right text-xs font-semibold text-[#706f6c] dark:text-[#A1A09A] uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-[#e3e3e0] dark:divide-[#3E3E3A]">
-                    @foreach($books as $book)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-colors">
-                            <td class="px-6 py-4">
-                                <a href="{{ route('books.show', $book) }}" class="font-semibold text-[#1b1b18] dark:text-[#EDEDEC] hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                    {{ $book->title }}
-                                </a>
-                            </td>
-                            <td class="px-6 py-4 text-[#706f6c] dark:text-[#A1A09A]">{{ $book->author }}</td>
-                            <td class="px-6 py-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($books as $book)
+            <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                <a href="{{ route('books.show', $book) }}">{{ $book->title }}</a>
+                            </h3>
+                            <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] mb-2">{{ $book->author }}</p>
+                            <div class="flex items-center gap-2">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                                     {{ $book->publication_year }}
                                 </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">
-                                {{ $book->created_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-end gap-2">
-                                    <a href="{{ route('books.show', $book) }}" class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors" title="View">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                        </svg>
-                                    </a>
-                                    <a href="{{ route('books.edit', $book) }}" class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/20 rounded-lg transition-colors" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </a>
-                                    <form action="{{ route('books.destroy', $book) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this book?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                                <span class="text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                                    {{ $book->created_at->format('M d, Y') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 pt-4 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
+                        <a href="{{ route('books.show', $book) }}" class="flex-1 text-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors font-medium text-sm">
+                            View
+                        </a>
+                        <a href="{{ route('books.edit', $book) }}" class="flex-1 text-center px-4 py-2 bg-gray-50 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900/40 transition-colors font-medium text-sm">
+                            Edit
+                        </a>
+                        <form action="{{ route('books.destroy', $book) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium text-sm">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
+    @if($books->hasPages())
+        <div class="mt-6">
+            {{ $books->links() }}
+        </div>
+    @endif
 @endif
 @endsection

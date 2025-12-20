@@ -20,22 +20,46 @@ class CategoryController extends Controller
         path: '/api/categories',
         summary: 'Get all categories',
         tags: ['Categories'],
+        parameters: [
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of categories',
+                description: 'Paginated list of categories',
                 content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Category')
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Category')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
                 )
             ),
         ]
     )]
     public function index(): JsonResponse|View
     {
+        $perPage = request()->get('per_page', 15);
         $categories = Category::query()
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate($perPage);
 
         if ($this->wantsJson()) {
             return response()->json($categories);

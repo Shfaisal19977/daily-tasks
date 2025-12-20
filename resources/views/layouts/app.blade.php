@@ -26,16 +26,22 @@
                         {{ config('app.name', 'Laravel') }}
                     </a>
                     <div class="hidden md:flex gap-1">
-                        <a href="{{ route('books.index') }}" class="px-4 py-2 text-sm font-medium text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a] rounded-lg transition-colors {{ request()->routeIs('books.*') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : '' }}">
+                        <a href="{{ route('home') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('home') ? 'text-[#f53003] dark:text-[#FF4433] bg-red-50 dark:bg-red-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
+                            Dashboard
+                        </a>
+                        <a href="{{ route('users.index') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('users.*') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
+                            Users
+                        </a>
+                        <a href="{{ route('books.index') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('books.*') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
                             Books
                         </a>
-                        <a href="{{ route('categories.index') }}" class="px-4 py-2 text-sm font-medium text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a] rounded-lg transition-colors {{ request()->routeIs('categories.*') ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20' : '' }}">
+                        <a href="{{ route('categories.index') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('categories.*') ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
                             Categories
                         </a>
-                        <a href="{{ route('products.index') }}" class="px-4 py-2 text-sm font-medium text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a] rounded-lg transition-colors {{ request()->routeIs('products.*') ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20' : '' }}">
+                        <a href="{{ route('products.index') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('products.*') ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
                             Products
                         </a>
-                        <a href="{{ route('projects.index') }}" class="px-4 py-2 text-sm font-medium text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a] rounded-lg transition-colors {{ request()->routeIs('projects.*') ? 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20' : '' }}">
+                        <a href="{{ route('projects.index') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('projects.*') ? 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 font-semibold' : 'text-[#706f6c] dark:text-[#A1A09A] hover:text-[#1b1b18] dark:hover:text-[#EDEDEC] hover:bg-gray-100 dark:hover:bg-[#0a0a0a]' }}">
                             Projects
                         </a>
                     </div>

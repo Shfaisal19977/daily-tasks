@@ -96,5 +96,10 @@
             </div>
         @endforeach
     </div>
+    @if($tasks->hasPages())
+        <div class="mt-6">
+            {{ $tasks->links() }}
+        </div>
+    @endif
 @endif
 @endsection
