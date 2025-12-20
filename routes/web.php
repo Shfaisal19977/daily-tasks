@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
@@ -14,6 +16,7 @@ Route::get('/', function () {
         'users' => \App\Models\User::count(),
         'books' => \App\Models\Book::count(),
         'categories' => \App\Models\Category::count(),
+        'posts' => \App\Models\Post::count(),
         'products' => \App\Models\Product::count(),
         'projects' => \App\Models\Project::count(),
         'tasks' => \App\Models\Task::count(),
@@ -39,8 +42,20 @@ Route::prefix('profile')->name('profile.')->controller(\App\Http\Controllers\Pro
 });
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
+Route::resource('posts', PostController::class);
 Route::resource('products', ProductController::class);
 Route::resource('projects', ProjectController::class);
+
+Route::prefix('posts/{post}/comments')->name('posts.comments.')->group(function () {
+    Route::get('/', [PostCommentController::class, 'index'])->name('index');
+    Route::get('/create', [PostCommentController::class, 'create'])->name('create');
+    Route::post('/', [PostCommentController::class, 'store'])->name('store');
+    Route::get('/{comment}', [PostCommentController::class, 'show'])->name('show');
+    Route::get('/{comment}/edit', [PostCommentController::class, 'edit'])->name('edit');
+    Route::put('/{comment}', [PostCommentController::class, 'update'])->name('update');
+    Route::patch('/{comment}', [PostCommentController::class, 'update'])->name('update');
+    Route::delete('/{comment}', [PostCommentController::class, 'destroy'])->name('destroy');
+});
 
 Route::prefix('projects/{project}/tasks')->name('projects.tasks.')->group(function () {
     Route::get('/', [ProjectTaskController::class, 'index'])->name('index');

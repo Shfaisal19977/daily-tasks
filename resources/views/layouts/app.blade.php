@@ -38,6 +38,9 @@
                         <a href="{{ route('categories.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('categories.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
                             <i class="fas fa-tags mr-2"></i>Categories
                         </a>
+                        <a href="{{ route('posts.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('posts.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
+                            <i class="fas fa-newspaper mr-2"></i>Posts
+                        </a>
                         <a href="{{ route('users.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('users.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
                             <i class="fas fa-users mr-2"></i>Users
                         </a>

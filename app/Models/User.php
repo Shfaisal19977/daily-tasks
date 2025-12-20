@@ -64,4 +64,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
+
+    /**
+     * A user has many post comments.
+     */
+    public function postComments(): HasMany
+    {
+        return $this->hasMany(PostComment::class);
+    }
 }

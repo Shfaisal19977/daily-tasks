@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 if (! defined('BOOK_ROUTE_PARAM')) {
     define('BOOK_ROUTE_PARAM', '/{book}');
     define('CATEGORY_ROUTE_PARAM', '/{category}');
+    define('POST_ROUTE_PARAM', '/{post}');
+    define('POST_COMMENT_ROUTE_PARAM', '/{comment}');
     define('PRODUCT_ROUTE_PARAM', '/{product}');
     define('PROJECT_ROUTE_PARAM', '/{project}');
     define('TASK_ROUTE_PARAM', '/{task}');
@@ -49,6 +53,24 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::put(CATEGORY_ROUTE_PARAM, 'update');
     Route::patch(CATEGORY_ROUTE_PARAM, 'update');
     Route::delete(CATEGORY_ROUTE_PARAM, 'destroy');
+});
+
+Route::controller(PostController::class)->prefix('posts')->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get(POST_ROUTE_PARAM, 'show');
+    Route::put(POST_ROUTE_PARAM, 'update');
+    Route::patch(POST_ROUTE_PARAM, 'update');
+    Route::delete(POST_ROUTE_PARAM, 'destroy');
+
+    Route::controller(PostCommentController::class)->prefix('{post}/comments')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get(POST_COMMENT_ROUTE_PARAM, 'show');
+        Route::put(POST_COMMENT_ROUTE_PARAM, 'update');
+        Route::patch(POST_COMMENT_ROUTE_PARAM, 'update');
+        Route::delete(POST_COMMENT_ROUTE_PARAM, 'destroy');
+    });
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {

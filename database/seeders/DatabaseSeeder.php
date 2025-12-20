@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             BookSeeder::class,
             CategorySeeder::class,
+            PostSeeder::class,
+            PostCommentSeeder::class,
             ProductSeeder::class,
             ProjectSeeder::class,
             TaskSeeder::class,

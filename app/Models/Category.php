@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -27,5 +28,14 @@ class Category extends Model
         return [
             'price' => 'decimal:2',
         ];
+    }
+
+    /**
+     * A category belongs to many posts.
+     */
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_category')
+            ->withTimestamps();
     }
 }
