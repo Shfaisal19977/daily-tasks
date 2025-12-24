@@ -141,10 +141,18 @@ class ProfileController extends Controller
     )]
     public function update(UpdateProfileRequest $request): JsonResponse|RedirectResponse
     {
+        // Check if this is an API request by multiple methods
+        $isApiRequest = $this->wantsJson() 
+            || $request->is('api/*') 
+            || str_starts_with($request->path(), 'api/')
+            || str_starts_with($request->url(), $request->schemeAndHttpHost() . '/api/')
+            || $request->expectsJson()
+            || $request->routeIs('api.*');
+
         $user = auth()->user() ?? User::first();
 
         if (!$user) {
-            if ($this->wantsJson()) {
+            if ($isApiRequest) {
                 return response()->json(['message' => 'No user found'], 404);
             }
             return redirect()->route('home')->with('error', 'No user found.');
@@ -154,11 +162,17 @@ class ProfileController extends Controller
         $profile->update($request->validated());
         $profile->refresh();
 
-        // Always return JSON for API requests
-        if ($this->wantsJson() || $request->is('api/*')) {
+        // Always return JSON for API requests - never redirect
+        if ($isApiRequest) {
             return response()->json($profile);
         }
 
-        return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+        // Only redirect for web requests
+        try {
+            return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+        } catch (\Exception $e) {
+            // Fallback: if route doesn't exist, return JSON anyway
+            return response()->json($profile);
+        }
     }
 }

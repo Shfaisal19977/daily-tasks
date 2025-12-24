@@ -177,6 +177,8 @@ class ProductController extends Controller
     )]
     public function show(Product $product): JsonResponse|View
     {
+        $product->load('category');
+
         if ($this->wantsJson()) {
             return response()->json($product);
         }

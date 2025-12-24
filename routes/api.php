@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MedicalFileController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -23,6 +25,8 @@ if (! defined('BOOK_ROUTE_PARAM')) {
     define('TASK_ROUTE_PARAM', '/{task}');
     define('COMMENT_ROUTE_PARAM', '/{comment}');
     define('USER_ROUTE_PARAM', '/{user}');
+    define('STUDENT_ROUTE_PARAM', '/{student}');
+    define('MEDICAL_FILE_ROUTE_PARAM', '/{medicalFile}');
 }
 
 // Authenticated User Routes
@@ -30,8 +34,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Profile API Routes (requires authentication)
-Route::middleware('auth:sanctum')->prefix('profile')->controller(ProfileController::class)->group(function () {
+// Profile API Routes
+Route::prefix('profile')->controller(ProfileController::class)->group(function () {
     Route::get('/', 'show');
     Route::put('/', 'update');
     Route::patch('/', 'update');
@@ -114,3 +118,20 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::get('/', 'index');
     Route::get(USER_ROUTE_PARAM, 'show');
 });
+
+// Student API Routes (One-to-One Relationship)
+Route::controller(StudentController::class)->prefix('students')->group(function () {
+    Route::post('/', 'store');
+    Route::get(STUDENT_ROUTE_PARAM, 'show');
+});
+
+// Medical File API Routes (One-to-One Relationship)
+Route::controller(MedicalFileController::class)->prefix('medical-files')->group(function () {
+    Route::post('/', 'store');
+    Route::get(MEDICAL_FILE_ROUTE_PARAM, 'show');
+    Route::put(MEDICAL_FILE_ROUTE_PARAM, 'update');
+    Route::patch(MEDICAL_FILE_ROUTE_PARAM, 'update');
+});
+
+// Get Medical File by Student
+Route::get('/students/{student}/medical-file', [MedicalFileController::class, 'getByStudent']);

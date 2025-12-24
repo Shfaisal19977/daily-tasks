@@ -173,6 +173,8 @@ class CategoryController extends Controller
     )]
     public function show(Category $category): JsonResponse|View
     {
+        $category->load('products');
+
         if ($this->wantsJson()) {
             return response()->json($category);
         }
@@ -347,6 +349,17 @@ class CategoryController extends Controller
     )]
     public function destroy(Category $category): JsonResponse|RedirectResponse
     {
+        // Prevent deletion if category has related products
+        if ($category->products()->count() > 0) {
+            if ($this->wantsJson()) {
+                return response()->json([
+                    'message' => 'Cannot delete category. This category has related products. Please remove or reassign products before deleting.',
+                ], 422);
+            }
+
+            return redirect()->back()->with('error', 'Cannot delete category. This category has related products.');
+        }
+
         $category->delete();
 
         if ($this->wantsJson()) {
