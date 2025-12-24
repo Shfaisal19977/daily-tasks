@@ -8,87 +8,109 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         [x-cloak] { display: none !important; }
+        /* Custom Color Palette from Color Hunt */
+        :root {
+            --navy-dark: #1B3C53;
+            --navy-medium: #234C6A;
+            --blue-grey: #456882;
+            --light-grey: #E3E3E3;
+        }
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover:not(.active) {
+            background-color: #234C6A !important;
+            color: white !important;
+        }
+        .nav-link.active {
+            background-color: #456882 !important;
+            color: white !important;
+        }
     </style>
     @stack('styles')
 </head>
-<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 min-h-screen flex flex-col">
-    <!-- Navigation -->
-    <nav class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('home') }}" class="text-white text-xl font-bold hover:text-purple-200 transition">
-                            <i class="fas fa-tasks mr-2"></i>Daily Tasks
-                        </a>
-                    </div>
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('home') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-home mr-2"></i>Dashboard
-                        </a>
-                        <a href="{{ route('projects.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('projects.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-project-diagram mr-2"></i>Projects
-                        </a>
-                        <a href="{{ route('books.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('books.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-book mr-2"></i>Books
-                        </a>
-                        <a href="{{ route('products.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('products.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-box mr-2"></i>Products
-                        </a>
-                        <a href="{{ route('categories.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('categories.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-tags mr-2"></i>Categories
-                        </a>
-                        <a href="{{ route('posts.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('posts.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-newspaper mr-2"></i>Posts
-                        </a>
-                        <a href="{{ route('users.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('users.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-users mr-2"></i>Users
-                        </a>
-                        <a href="{{ route('profile') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('profile.*') ? 'border-yellow-300 text-yellow-200' : 'border-transparent text-white hover:border-purple-300 hover:text-purple-200' }} text-sm font-medium transition">
-                            <i class="fas fa-user-circle mr-2"></i>Profile
-                        </a>
-                    </div>
-                </div>
+<body class="min-h-screen flex" style="background-color: #E3E3E3;">
+    <!-- Sidebar Navigation -->
+    <nav class="w-64 min-h-screen shadow-lg" style="background-color: #1B3C53;">
+        <div class="flex flex-col h-full">
+            <!-- Logo/Brand -->
+            <div class="p-6 border-b" style="border-color: #234C6A;">
+                <a href="{{ route('home') }}" class="text-white text-xl font-bold hover:opacity-80 transition flex items-center">
+                    <i class="fas fa-tasks mr-2"></i>Daily Tasks
+                </a>
+            </div>
+            
+            <!-- Navigation Links -->
+            <div class="flex-1 py-4">
+                <nav class="space-y-1 px-3">
+                    <a href="{{ route('home') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('home') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-home mr-3 w-5"></i>Dashboard
+                    </a>
+                    <a href="{{ route('projects.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('projects.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-project-diagram mr-3 w-5"></i>Projects
+                    </a>
+                    <a href="{{ route('books.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('books.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-book mr-3 w-5"></i>Books
+                    </a>
+                    <a href="{{ route('products.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('products.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-box mr-3 w-5"></i>Products
+                    </a>
+                    <a href="{{ route('categories.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('categories.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-tags mr-3 w-5"></i>Categories
+                    </a>
+                    <a href="{{ route('posts.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('posts.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-newspaper mr-3 w-5"></i>Posts
+                    </a>
+                    <a href="{{ route('users.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('users.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-users mr-3 w-5"></i>Users
+                    </a>
+                    <a href="{{ route('profile') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('profile.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-user-circle mr-3 w-5"></i>Profile
+                    </a>
+                </nav>
             </div>
         </div>
     </nav>
 
-    <!-- Flash Messages -->
-    @if(session('success'))
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md" role="alert">
-                <div class="flex items-center">
-                    <i class="fas fa-check-circle mr-2"></i>
-                    <p class="font-medium">{{ session('success') }}</p>
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-h-screen">
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <div class="px-6 pt-4">
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md" role="alert">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <p class="font-medium">{{ session('success') }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
 
-    @if(session('error'))
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md" role="alert">
-                <div class="flex items-center">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
-                    <p class="font-medium">{{ session('error') }}</p>
+        @if(session('error'))
+            <div class="px-6 pt-4">
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md" role="alert">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <p class="font-medium">{{ session('error') }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
 
-    <!-- Main Content -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        @yield('content')
-    </main>
+        <!-- Main Content -->
+        <main class="flex-1 px-6 py-8">
+            @yield('content')
+        </main>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <p class="text-center text-sm">
-                &copy; {{ date('Y') }} Daily Tasks - Project Management System
-            </p>
-        </div>
-    </footer>
+        <!-- Footer -->
+        <footer class="text-white py-6" style="background-color: #1B3C53;">
+            <div class="px-6">
+                <p class="text-center text-sm">
+                    &copy; {{ date('Y') }} Daily Tasks - Project Management System
+                </p>
+            </div>
+        </footer>
+    </div>
 
     @stack('scripts')
 </body>

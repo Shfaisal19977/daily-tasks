@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-xl shadow-lg p-8 border-l-4 border-green-500">
+    <div class="bg-white rounded-xl shadow-lg p-8 border-l-4" style="border-color: #456882;">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">
-            <i class="fas fa-plus-circle text-green-600 mr-3"></i>Create New Book
+            <i class="fas fa-plus-circle mr-3" style="color: #456882;"></i>Create New Book
         </h1>
 
         <form action="{{ route('books.store') }}" method="POST" class="space-y-6">
@@ -15,10 +15,10 @@
             <!-- Title -->
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-book mr-2 text-green-500"></i>Book Title
+                    <i class="fas fa-book mr-2" style="color: #456882;"></i>Book Title
                 </label>
                 <input type="text" name="title" id="title" value="{{ old('title') }}" required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('title') border-red-500 @enderror">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition @error('title') border-red-500 @enderror" style="focus:ring-color: #456882; focus:border-color: #456882;" onfocus="this.style.borderColor='#456882'; this.style.boxShadow='0 0 0 3px rgba(69, 104, 130, 0.1)'" onblur="this.style.borderColor=''; this.style.boxShadow=''">
                 @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -27,10 +27,10 @@
             <!-- Author -->
             <div>
                 <label for="author" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-user mr-2 text-green-500"></i>Author
+                    <i class="fas fa-user mr-2" style="color: #456882;"></i>Author
                 </label>
                 <input type="text" name="author" id="author" value="{{ old('author') }}" required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('author') border-red-500 @enderror">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition @error('author') border-red-500 @enderror" onfocus="this.style.borderColor='#456882'; this.style.boxShadow='0 0 0 3px rgba(69, 104, 130, 0.1)'" onblur="this.style.borderColor=''; this.style.boxShadow=''">
                 @error('author')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -39,10 +39,10 @@
             <!-- Publication Year -->
             <div>
                 <label for="publication_year" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-calendar mr-2 text-green-500"></i>Publication Year
+                    <i class="fas fa-calendar mr-2" style="color: #456882;"></i>Publication Year
                 </label>
                 <input type="number" name="publication_year" id="publication_year" value="{{ old('publication_year') }}" min="1000" max="9999" required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('publication_year') border-red-500 @enderror">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition @error('publication_year') border-red-500 @enderror" onfocus="this.style.borderColor='#456882'; this.style.boxShadow='0 0 0 3px rgba(69, 104, 130, 0.1)'" onblur="this.style.borderColor=''; this.style.boxShadow=''">
                 @error('publication_year')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -51,7 +51,7 @@
             <!-- Cover Information -->
             <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    <i class="fas fa-image mr-2 text-green-500"></i>Cover Information
+                    <i class="fas fa-image mr-2" style="color: #456882;"></i>Cover Information
                 </h3>
                 
                 <!-- Cover Color -->
@@ -60,8 +60,8 @@
                         Cover Color
                     </label>
                     <input type="text" name="cover_color" id="cover_color" value="{{ old('cover_color') }}"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('cover_color') border-red-500 @enderror"
-                        placeholder="e.g., Blue, Red, Green">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg transition @error('cover_color') border-red-500 @enderror"
+                        placeholder="e.g., Blue, Red, Green" onfocus="this.style.borderColor='#456882'; this.style.boxShadow='0 0 0 3px rgba(69, 104, 130, 0.1)'" onblur="this.style.borderColor=''; this.style.boxShadow=''">
                     @error('cover_color')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -73,7 +73,7 @@
                         Cover Format
                     </label>
                     <select name="cover_format" id="cover_format"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('cover_format') border-red-500 @enderror">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg transition @error('cover_format') border-red-500 @enderror" onfocus="this.style.borderColor='#456882'; this.style.boxShadow='0 0 0 3px rgba(69, 104, 130, 0.1)'" onblur="this.style.borderColor=''; this.style.boxShadow=''">
                         <option value="">Select format</option>
                         <option value="hardcover" {{ old('cover_format') === 'hardcover' ? 'selected' : '' }}>Hardcover</option>
                         <option value="paperback" {{ old('cover_format') === 'paperback' ? 'selected' : '' }}>Paperback</option>
@@ -88,7 +88,7 @@
             <!-- Categories -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-tags mr-2 text-green-500"></i>Categories
+                    <i class="fas fa-tags mr-2" style="color: #456882;"></i>Categories
                 </label>
                 <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto">
                     @if($categories->count() > 0)
@@ -97,14 +97,14 @@
                                 <input type="checkbox" name="categories[]" id="category_{{ $category->id }}" 
                                     value="{{ $category->id }}" 
                                     {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}
-                                    class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                    class="h-4 w-4 border-gray-300 rounded" style="accent-color: #456882;">
                                 <label for="category_{{ $category->id }}" class="ml-2 text-sm text-gray-700">
                                     {{ $category->name }}
                                 </label>
                             </div>
                         @endforeach
                     @else
-                        <p class="text-sm text-gray-500">No categories available. <a href="{{ route('categories.create') }}" class="text-green-600 hover:underline">Create one</a></p>
+                        <p class="text-sm text-gray-500">No categories available. <a href="{{ route('categories.create') }}" style="color: #456882;" class="hover:underline">Create one</a></p>
                     @endif
                 </div>
                 @error('categories.*')
@@ -114,7 +114,7 @@
 
             <!-- Form Actions -->
             <div class="flex space-x-4 pt-4">
-                <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition transform hover:scale-105 font-medium">
+                <button type="submit" class="flex-1 text-white px-6 py-3 rounded-lg transition transform hover:scale-105 font-medium" style="background: linear-gradient(to right, #234C6A, #456882);" onmouseover="this.style.background='linear-gradient(to right, #456882, #234C6A)'" onmouseout="this.style.background='linear-gradient(to right, #234C6A, #456882)'">
                     <i class="fas fa-save mr-2"></i>Create Book
                 </button>
                 <a href="{{ route('books.index') }}" class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition text-center font-medium">

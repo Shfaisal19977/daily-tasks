@@ -5,9 +5,9 @@
 @section('content')
 <div class="space-y-6">
     <!-- Page Header -->
-    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4" style="border-color: #456882;">
         <h1 class="text-3xl font-bold text-gray-800">
-            <i class="fas fa-users text-blue-600 mr-3"></i>Users
+            <i class="fas fa-users mr-3" style="color: #456882;"></i>Users
         </h1>
         <p class="text-gray-600 mt-2">Manage system users</p>
     </div>
@@ -16,10 +16,10 @@
     @if($users->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($users as $user)
-                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-200 overflow-hidden border-t-4 border-blue-500">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-200 overflow-hidden border-t-4" style="border-color: #456882;">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="bg-blue-500 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-xl">
+                            <div class="rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-xl" style="background-color: #456882;">
                                 {{ strtoupper(substr($user->name, 0, 1)) }}
                             </div>
                             <div class="ml-4">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="flex items-center text-sm text-gray-500 mb-4">
-                            <i class="fas fa-calendar mr-2 text-blue-500"></i>
+                            <i class="fas fa-calendar mr-2" style="color: #456882;"></i>
                             <span>Joined {{ $user->created_at->format('M d, Y') }}</span>
                         </div>
                         @if($user->email_verified_at)
