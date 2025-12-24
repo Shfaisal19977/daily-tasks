@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -57,7 +58,7 @@ class BookController extends Controller
     public function index(): JsonResponse|View
     {
         $perPage = request()->get('per_page', 15);
-        $books = Book::query()
+        $books = Book::with('categories')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
@@ -92,6 +93,8 @@ class BookController extends Controller
     )]
     public function show(Book $book): JsonResponse|View
     {
+        $book->load(['cover', 'reviews', 'categories']);
+
         if ($this->wantsJson()) {
             return response()->json($book);
         }
@@ -126,14 +129,41 @@ class BookController extends Controller
     )]
     public function create(): View
     {
-        return view('books.create');
+        $categories = Category::orderBy('name')->get();
+        return view('books.create', compact('categories'));
     }
 
     public function store(StoreBookRequest $request): JsonResponse|RedirectResponse
     {
-        $book = Book::query()->create($request->validated());
+        $validated = $request->validated();
+        
+        // Extract cover data
+        $coverData = null;
+        if (isset($validated['cover_color']) || isset($validated['cover_format'])) {
+            $coverData = [
+                'color' => $validated['cover_color'] ?? null,
+                'format' => $validated['cover_format'] ?? null,
+            ];
+            unset($validated['cover_color'], $validated['cover_format']);
+        }
+        
+        // Extract categories
+        $categories = $validated['categories'] ?? [];
+        unset($validated['categories']);
+        
+        // Create book
+        $book = Book::query()->create($validated);
+        
+        // Create cover if data provided
+        if ($coverData && ($coverData['color'] || $coverData['format'])) {
+            $book->cover()->create($coverData);
+        }
+        
+        // Sync categories (sync with empty array if none provided)
+        $book->categories()->sync($categories ?? []);
 
         if ($this->wantsJson()) {
+            $book->load(['cover', 'categories']);
             return response()->json($book, 201);
         }
 
@@ -208,14 +238,52 @@ class BookController extends Controller
     )]
     public function edit(Book $book): View
     {
-        return view('books.edit', compact('book'));
+        $book->load(['cover', 'categories']);
+        $categories = Category::orderBy('name')->get();
+        return view('books.edit', compact('book', 'categories'));
     }
 
     public function update(UpdateBookRequest $request, Book $book): JsonResponse|RedirectResponse
     {
-        $book->update($request->validated());
+        $validated = $request->validated();
+        
+        // Extract cover data
+        $coverData = null;
+        if (isset($validated['cover_color']) || isset($validated['cover_format'])) {
+            $coverData = [
+                'color' => $validated['cover_color'] ?? null,
+                'format' => $validated['cover_format'] ?? null,
+            ];
+            unset($validated['cover_color'], $validated['cover_format']);
+        }
+        
+        // Extract categories
+        $categories = $validated['categories'] ?? null;
+        unset($validated['categories']);
+        
+        // Update book
+        $book->update($validated);
+        
+        // Update or create cover if data provided
+        if ($coverData !== null) {
+            if ($coverData['color'] || $coverData['format']) {
+                $book->cover()->updateOrCreate(
+                    ['book_id' => $book->id],
+                    $coverData
+                );
+            } else {
+                // If both are empty, delete cover if it exists
+                $book->cover()->delete();
+            }
+        }
+        
+        // Sync categories if provided
+        if ($categories !== null) {
+            $book->categories()->sync($categories);
+        }
 
         if ($this->wantsJson()) {
+            $book->load(['cover', 'categories']);
             return response()->json($book);
         }
 

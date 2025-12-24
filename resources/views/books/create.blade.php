@@ -48,6 +48,70 @@
                 @enderror
             </div>
 
+            <!-- Cover Information -->
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-image mr-2 text-green-500"></i>Cover Information
+                </h3>
+                
+                <!-- Cover Color -->
+                <div class="mb-4">
+                    <label for="cover_color" class="block text-sm font-medium text-gray-700 mb-2">
+                        Cover Color
+                    </label>
+                    <input type="text" name="cover_color" id="cover_color" value="{{ old('cover_color') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('cover_color') border-red-500 @enderror"
+                        placeholder="e.g., Blue, Red, Green">
+                    @error('cover_color')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Cover Format -->
+                <div>
+                    <label for="cover_format" class="block text-sm font-medium text-gray-700 mb-2">
+                        Cover Format
+                    </label>
+                    <select name="cover_format" id="cover_format"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition @error('cover_format') border-red-500 @enderror">
+                        <option value="">Select format</option>
+                        <option value="hardcover" {{ old('cover_format') === 'hardcover' ? 'selected' : '' }}>Hardcover</option>
+                        <option value="paperback" {{ old('cover_format') === 'paperback' ? 'selected' : '' }}>Paperback</option>
+                        <option value="ebook" {{ old('cover_format') === 'ebook' ? 'selected' : '' }}>E-book</option>
+                    </select>
+                    @error('cover_format')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-tags mr-2 text-green-500"></i>Categories
+                </label>
+                <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto">
+                    @if($categories->count() > 0)
+                        @foreach($categories as $category)
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" name="categories[]" id="category_{{ $category->id }}" 
+                                    value="{{ $category->id }}" 
+                                    {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}
+                                    class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                <label for="category_{{ $category->id }}" class="ml-2 text-sm text-gray-700">
+                                    {{ $category->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    @else
+                        <p class="text-sm text-gray-500">No categories available. <a href="{{ route('categories.create') }}" class="text-green-600 hover:underline">Create one</a></p>
+                    @endif
+                </div>
+                @error('categories.*')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!-- Form Actions -->
             <div class="flex space-x-4 pt-4">
                 <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition transform hover:scale-105 font-medium">

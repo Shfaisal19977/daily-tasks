@@ -47,4 +47,13 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * A category belongs to many books.
+     */
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class, 'book_category')
+            ->withTimestamps();
+    }
 }

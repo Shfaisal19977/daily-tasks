@@ -25,6 +25,10 @@ class StoreBookRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string', 'max:255'],
             'publication_year' => ['required', 'integer', 'digits:4', 'min:1000', 'max:9999'],
+            'cover_color' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'cover_format' => ['sometimes', 'nullable', 'in:hardcover,paperback,ebook'],
+            'categories' => ['sometimes', 'nullable', 'array'],
+            'categories.*' => ['exists:categories,id'],
         ];
     }
 

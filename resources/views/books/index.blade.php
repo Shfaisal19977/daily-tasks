@@ -31,6 +31,17 @@
                             <i class="fas fa-calendar text-green-500 mr-2"></i>
                             <span>{{ $book->publication_year }}</span>
                         </div>
+                        @if($book->categories->count() > 0)
+                            <div class="mb-4">
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($book->categories as $category)
+                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            {{ $category->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                         <div class="flex space-x-2">
                             <a href="{{ route('books.show', $book) }}" class="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-center text-sm font-medium">
                                 <i class="fas fa-eye mr-1"></i>View
