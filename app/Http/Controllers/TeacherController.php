@@ -9,7 +9,12 @@ use App\Services\TeacherService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(
+    name: 'Teachers',
+    description: 'Teacher management endpoints (School Management System)'
+)]
 class TeacherController extends Controller
 {
     public function __construct(
@@ -17,6 +22,44 @@ class TeacherController extends Controller
     ) {
     }
 
+    #[OA\Get(
+        path: '/api/teachers',
+        summary: 'Get all teachers',
+        tags: ['Teachers'],
+        parameters: [
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Paginated list of teachers',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Teacher')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
+                )
+            ),
+        ]
+    )]
     /**
      * Display a listing of teachers.
      */
@@ -110,6 +153,31 @@ class TeacherController extends Controller
             ->with('success', 'Teacher deleted successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/teachers/{teacher}/courses',
+        summary: 'Get all courses for a specific teacher',
+        tags: ['Teachers'],
+        parameters: [
+            new OA\Parameter(
+                name: 'teacher',
+                in: 'path',
+                required: true,
+                description: 'Teacher ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of courses for the teacher',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Course')
+                )
+            ),
+            new OA\Response(response: 404, description: 'Teacher not found'),
+        ]
+    )]
     /**
      * Get all courses for a specific teacher.
      */
@@ -120,6 +188,56 @@ class TeacherController extends Controller
         return response()->json($courses);
     }
 
+    #[OA\Post(
+        path: '/api/teachers/{teacher}/courses',
+        summary: 'Attach courses to a teacher',
+        description: 'Creates and attaches one or more courses to a specific teacher',
+        tags: ['Teachers'],
+        parameters: [
+            new OA\Parameter(
+                name: 'teacher',
+                in: 'path',
+                required: true,
+                description: 'Teacher ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: 'Courses data',
+            content: new OA\JsonContent(
+                ref: '#/components/schemas/AttachCoursesRequest',
+                example: [
+                    'courses' => [
+                        ['name' => 'Mathematics 101'],
+                        ['name' => 'Physics 201'],
+                    ],
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Courses attached successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Courses attached successfully'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Teacher not found'),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The given data was invalid.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['courses' => ['The courses field is required.']]),
+                    ]
+                )
+            ),
+        ]
+    )]
     /**
      * Attach courses to a teacher.
      */

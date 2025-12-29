@@ -9,7 +9,12 @@ use App\Services\CourseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(
+    name: 'Courses',
+    description: 'Course management endpoints (School Management System)'
+)]
 class CourseController extends Controller
 {
     public function __construct(
@@ -111,6 +116,31 @@ class CourseController extends Controller
             ->with('success', 'Course deleted successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/courses/{course}/students',
+        summary: 'Get all students enrolled in a specific course',
+        tags: ['Courses'],
+        parameters: [
+            new OA\Parameter(
+                name: 'course',
+                in: 'path',
+                required: true,
+                description: 'Course ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of students enrolled in the course',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Student')
+                )
+            ),
+            new OA\Response(response: 404, description: 'Course not found'),
+        ]
+    )]
     /**
      * Get all students enrolled in a specific course.
      */
@@ -121,6 +151,53 @@ class CourseController extends Controller
         return response()->json($students);
     }
 
+    #[OA\Post(
+        path: '/api/courses/{course}/students/sync',
+        summary: 'Sync students to a course',
+        description: 'Synchronizes the list of students enrolled in a course. This will replace the existing student list with the provided one.',
+        tags: ['Courses'],
+        parameters: [
+            new OA\Parameter(
+                name: 'course',
+                in: 'path',
+                required: true,
+                description: 'Course ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: 'Student IDs to sync',
+            content: new OA\JsonContent(
+                ref: '#/components/schemas/SyncStudentsRequest',
+                example: [
+                    'student_ids' => [1, 2, 3],
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Students synced successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Students synced successfully'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Course not found'),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The given data was invalid.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['student_ids' => ['The student ids field is required.']]),
+                    ]
+                )
+            ),
+        ]
+    )]
     /**
      * Sync students to a course.
      */

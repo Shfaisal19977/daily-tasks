@@ -746,6 +746,129 @@
                 }
             }
         },
+        "/api/courses/{course}/students": {
+            "get": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Get all students enrolled in a specific course",
+                "description": "Get all students enrolled in a specific course.",
+                "operationId": "4e22cd0690ef7eb03cb63bf9f7e2adc9",
+                "parameters": [
+                    {
+                        "name": "course",
+                        "in": "path",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of students enrolled in the course",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Student"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    }
+                }
+            }
+        },
+        "/api/courses/{course}/students/sync": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Sync students to a course",
+                "description": "Synchronizes the list of students enrolled in a course. This will replace the existing student list with the provided one.",
+                "operationId": "4bd60504ca3884b1e265532b7eb7ef82",
+                "parameters": [
+                    {
+                        "name": "course",
+                        "in": "path",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Student IDs to sync",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SyncStudentsRequest"
+                            },
+                            "example": {
+                                "student_ids": [
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Students synced successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Students synced successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "student_ids": [
+                                                    "The student ids field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/posts/{post}/comments": {
             "get": {
                 "tags": [
@@ -2722,6 +2845,187 @@
                 }
             }
         },
+        "/api/students": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Get all students",
+                "description": "Display a listing of students.",
+                "operationId": "75378cfd9c3d128e0846de3d32b101ec",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of students",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Student"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 100
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 15
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Create a new student",
+                "description": "Creates a new student profile associated with a user. The user must not already be associated with a teacher or student.",
+                "operationId": "5e69d562cd0a6141ac0ffdd5a921d62b",
+                "requestBody": {
+                    "description": "Student data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreStudentRequest"
+                            },
+                            "example": {
+                                "user_id": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Student created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Student"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "user_id": 1,
+                                    "user": {
+                                        "id": 1,
+                                        "name": "John Doe",
+                                        "email": "john@example.com"
+                                    },
+                                    "created_at": "2025-01-02T00:00:00.000000Z",
+                                    "updated_at": "2025-01-02T00:00:00.000000Z"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The user id field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "user_id": [
+                                                    "The user id field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/students/{student}": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Get a specific student",
+                "description": "Retrieves a student by ID, including associated user and medical file information",
+                "operationId": "6159da8be33d56982b5879bc00a7dfd4",
+                "parameters": [
+                    {
+                        "name": "student",
+                        "in": "path",
+                        "description": "Student ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Student"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                }
+            }
+        },
         "/api/tasks/{task}/comments": {
             "get": {
                 "tags": [
@@ -3065,6 +3369,206 @@
                     },
                     "422": {
                         "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/teachers": {
+            "get": {
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get all teachers",
+                "description": "Display a listing of teachers.",
+                "operationId": "9115585a972eee31c1bb78305dc1620c",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of teachers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Teacher"
+                                            }
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 100
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 15
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/teachers/{teacher}/courses": {
+            "get": {
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Get all courses for a specific teacher",
+                "description": "Get all courses for a specific teacher.",
+                "operationId": "82fc741fedce2a856a561fb49ce49c1c",
+                "parameters": [
+                    {
+                        "name": "teacher",
+                        "in": "path",
+                        "description": "Teacher ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of courses for the teacher",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Course"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Teacher not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Teachers"
+                ],
+                "summary": "Attach courses to a teacher",
+                "description": "Creates and attaches one or more courses to a specific teacher",
+                "operationId": "359a530e08a5e5fff2a944fee50a1f40",
+                "parameters": [
+                    {
+                        "name": "teacher",
+                        "in": "path",
+                        "description": "Teacher ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Courses data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttachCoursesRequest"
+                            },
+                            "example": {
+                                "courses": [
+                                    {
+                                        "name": "Mathematics 101"
+                                    },
+                                    {
+                                        "name": "Physics 201"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Courses attached successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Courses attached successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Teacher not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "courses": [
+                                                    "The courses field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -3442,6 +3946,135 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "Jane Smith"
+                    }
+                },
+                "type": "object"
+            },
+            "Course": {
+                "description": "Course model",
+                "properties": {
+                    "id": {
+                        "description": "Unique course identifier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Course name",
+                        "type": "string",
+                        "example": "Mathematics 101"
+                    },
+                    "teacher_id": {
+                        "description": "Teacher ID who teaches this course",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "teacher": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Teacher"
+                            }
+                        ],
+                        "nullable": true,
+                        "description": "Associated teacher object",
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreCourseRequest": {
+                "required": [
+                    "name",
+                    "teacher_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Course name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Mathematics 101"
+                    },
+                    "teacher_id": {
+                        "description": "Teacher ID who teaches this course",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCourseRequest": {
+                "properties": {
+                    "name": {
+                        "description": "Course name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Advanced Mathematics 101"
+                    },
+                    "teacher_id": {
+                        "description": "Teacher ID who teaches this course",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "AttachCoursesRequest": {
+                "required": [
+                    "courses"
+                ],
+                "properties": {
+                    "courses": {
+                        "description": "Array of courses to attach",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "description": "Course name",
+                                    "type": "string",
+                                    "example": "Mathematics 101"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": [
+                            {
+                                "name": "Mathematics 101"
+                            },
+                            {
+                                "name": "Physics 201"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "SyncStudentsRequest": {
+                "required": [
+                    "student_ids"
+                ],
+                "properties": {
+                    "student_ids": {
+                        "description": "Array of student IDs to sync to the course",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
                     }
                 },
                 "type": "object"
@@ -3949,6 +4582,72 @@
                 },
                 "type": "object"
             },
+            "Student": {
+                "description": "Student model",
+                "properties": {
+                    "id": {
+                        "description": "Unique student identifier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "description": "User ID associated with the student",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ],
+                        "nullable": true,
+                        "description": "Associated user object",
+                        "type": "object"
+                    },
+                    "medical_file": {
+                        "description": "Associated medical file object",
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreStudentRequest": {
+                "required": [
+                    "user_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "User ID to associate with the student",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateStudentRequest": {
+                "properties": {
+                    "user_id": {
+                        "description": "User ID to associate with the student",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
             "Task": {
                 "description": "Task model with priority, status, and due date",
                 "properties": {
@@ -4084,6 +4783,67 @@
                 },
                 "type": "object"
             },
+            "Teacher": {
+                "description": "Teacher model",
+                "properties": {
+                    "id": {
+                        "description": "Unique teacher identifier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "description": "User ID associated with the teacher",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ],
+                        "nullable": true,
+                        "description": "Associated user object",
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T00:00:00.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreTeacherRequest": {
+                "required": [
+                    "user_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "User ID to associate with the teacher",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTeacherRequest": {
+                "properties": {
+                    "user_id": {
+                        "description": "User ID to associate with the teacher",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "description": "User model",
                 "properties": {
@@ -4137,6 +4897,10 @@
             "description": "Category management endpoints"
         },
         {
+            "name": "Courses",
+            "description": "Course management endpoints (School Management System)"
+        },
+        {
             "name": "PostComments",
             "description": "Post comment management endpoints"
         },
@@ -4161,8 +4925,16 @@
             "description": "Task management endpoints within projects"
         },
         {
+            "name": "Students",
+            "description": "Student management endpoints (School Management System)"
+        },
+        {
             "name": "Comments",
             "description": "Comment management endpoints on tasks"
+        },
+        {
+            "name": "Teachers",
+            "description": "Teacher management endpoints (School Management System)"
         },
         {
             "name": "Users",

@@ -9,7 +9,12 @@ use App\Services\StudentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(
+    name: 'Students',
+    description: 'Student management endpoints (School Management System)'
+)]
 class StudentController extends Controller
 {
     public function __construct(
@@ -17,6 +22,44 @@ class StudentController extends Controller
     ) {
     }
 
+    #[OA\Get(
+        path: '/api/students',
+        summary: 'Get all students',
+        tags: ['Students'],
+        parameters: [
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                description: 'Number of items per page',
+                schema: new OA\Schema(type: 'integer', default: 15)
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: 'Page number',
+                schema: new OA\Schema(type: 'integer', default: 1)
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Paginated list of students',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Student')),
+                        new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                        new OA\Property(property: 'per_page', type: 'integer', example: 15),
+                        new OA\Property(property: 'total', type: 'integer', example: 100),
+                        new OA\Property(property: 'last_page', type: 'integer', example: 7),
+                        new OA\Property(property: 'from', type: 'integer', example: 1),
+                        new OA\Property(property: 'to', type: 'integer', example: 15),
+                    ]
+                )
+            ),
+        ]
+    )]
     /**
      * Display a listing of students.
      */
@@ -41,6 +84,52 @@ class StudentController extends Controller
         return view('students.create', compact('users'));
     }
 
+    #[OA\Post(
+        path: '/api/students',
+        summary: 'Create a new student',
+        description: 'Creates a new student profile associated with a user. The user must not already be associated with a teacher or student.',
+        tags: ['Students'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: 'Student data',
+            content: new OA\JsonContent(
+                ref: '#/components/schemas/StoreStudentRequest',
+                example: [
+                    'user_id' => 1,
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Student created successfully',
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/Student',
+                    example: [
+                        'id' => 1,
+                        'user_id' => 1,
+                        'user' => [
+                            'id' => 1,
+                            'name' => 'John Doe',
+                            'email' => 'john@example.com',
+                        ],
+                        'created_at' => '2025-01-02T00:00:00.000000Z',
+                        'updated_at' => '2025-01-02T00:00:00.000000Z',
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The user id field is required.'),
+                        new OA\Property(property: 'errors', type: 'object', example: ['user_id' => ['The user id field is required.']]),
+                    ]
+                )
+            ),
+        ]
+    )]
     /**
      * Store a newly created student in storage.
      */
@@ -56,6 +145,29 @@ class StudentController extends Controller
             ->with('success', 'Student created successfully.');
     }
 
+    #[OA\Get(
+        path: '/api/students/{student}',
+        summary: 'Get a specific student',
+        description: 'Retrieves a student by ID, including associated user and medical file information',
+        tags: ['Students'],
+        parameters: [
+            new OA\Parameter(
+                name: 'student',
+                in: 'path',
+                required: true,
+                description: 'Student ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Student details',
+                content: new OA\JsonContent(ref: '#/components/schemas/Student')
+            ),
+            new OA\Response(response: 404, description: 'Student not found'),
+        ]
+    )]
     /**
      * Display the specified student.
      */
