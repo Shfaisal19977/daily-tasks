@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreStudentRequest extends FormRequest
+class StoreTeacherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,8 @@ class StoreStudentRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:users,id',
-                Rule::unique('students', 'user_id'),
                 Rule::unique('teachers', 'user_id'),
+                Rule::unique('students', 'user_id'),
             ],
         ];
     }

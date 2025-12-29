@@ -64,6 +64,18 @@
                     <a href="{{ route('users.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('users.*') ? 'active text-white' : 'text-gray-300' }}">
                         <i class="fas fa-users mr-3 w-5"></i>Users
                     </a>
+                    <div class="pt-2 pb-1 px-4">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">School Management</p>
+                    </div>
+                    <a href="{{ route('teachers.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('teachers.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-chalkboard-teacher mr-3 w-5"></i>Teachers
+                    </a>
+                    <a href="{{ route('students.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('students.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-user-graduate mr-3 w-5"></i>Students
+                    </a>
+                    <a href="{{ route('courses.index') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('courses.*') ? 'active text-white' : 'text-gray-300' }}">
+                        <i class="fas fa-book-reader mr-3 w-5"></i>Courses
+                    </a>
                     <a href="{{ route('profile') }}" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {{ request()->routeIs('profile.*') ? 'active text-white' : 'text-gray-300' }}">
                         <i class="fas fa-user-circle mr-3 w-5"></i>Profile
                     </a>

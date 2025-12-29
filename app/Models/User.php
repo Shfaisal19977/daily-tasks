@@ -72,4 +72,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(PostComment::class);
     }
+
+    /**
+     * A user has one teacher profile.
+     */
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    /**
+     * A user has one student profile.
+     */
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
 }

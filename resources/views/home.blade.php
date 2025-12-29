@@ -119,6 +119,53 @@
         </div>
     </div>
 
+    <!-- School Management System Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 mt-6" style="border-color: #456882;">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-graduation-cap mr-3" style="color: #456882;"></i>School Management System
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Teachers Card -->
+            <div class="rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200" style="background: linear-gradient(to bottom right, #1B3C53, #234C6A);">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium opacity-90">Total Teachers</p>
+                        <p class="text-3xl font-bold mt-2">{{ number_format($stats['teachers']) }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-chalkboard-teacher text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Card -->
+            <div class="rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200" style="background: linear-gradient(to bottom right, #234C6A, #456882);">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium opacity-90">Total Students</p>
+                        <p class="text-3xl font-bold mt-2">{{ number_format($stats['students']) }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-user-graduate text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Card -->
+            <div class="rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition duration-200" style="background: linear-gradient(to bottom right, #456882, #234C6A);">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium opacity-90">Total Courses</p>
+                        <p class="text-3xl font-bold mt-2">{{ number_format($stats['courses']) }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-book-reader text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Inventory Value Card -->
     <div class="rounded-xl shadow-lg p-6 text-white" style="background: linear-gradient(to right, #456882, #234C6A, #1B3C53);">
         <div class="flex items-center justify-between">
@@ -133,7 +180,7 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <!-- Recent Users -->
         <div class="bg-white rounded-xl shadow-lg p-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
@@ -152,6 +199,50 @@
                     </div>
                 @empty
                     <p class="text-gray-500 text-center py-4">No users yet</p>
+                @endforelse
+            </div>
+        </div>
+        
+        <!-- Recent Teachers -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-chalkboard-teacher mr-2" style="color: #456882;"></i>Recent Teachers
+            </h2>
+            <div class="space-y-3">
+                @forelse($recentTeachers as $teacher)
+                    <div class="flex items-center p-3 rounded-lg transition" style="background-color: #E3E3E3;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='#E3E3E3'">
+                        <div class="rounded-full w-10 h-10 flex items-center justify-center text-white font-bold" style="background-color: #456882;">
+                            {{ strtoupper(substr($teacher->user->name ?? 'T', 0, 1)) }}
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-800">{{ $teacher->user->name ?? 'N/A' }}</p>
+                            <p class="text-sm text-gray-500">{{ $teacher->user->email ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-4">No teachers yet</p>
+                @endforelse
+            </div>
+        </div>
+        
+        <!-- Recent Students -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-user-graduate mr-2" style="color: #456882;"></i>Recent Students
+            </h2>
+            <div class="space-y-3">
+                @forelse($recentStudents as $student)
+                    <div class="flex items-center p-3 rounded-lg transition" style="background-color: #E3E3E3;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='#E3E3E3'">
+                        <div class="rounded-full w-10 h-10 flex items-center justify-center text-white font-bold" style="background-color: #456882;">
+                            {{ strtoupper(substr($student->user->name ?? 'S', 0, 1)) }}
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-800">{{ $student->user->name ?? 'N/A' }}</p>
+                            <p class="text-sm text-gray-500">{{ $student->user->email ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-4">No students yet</p>
                 @endforelse
             </div>
         </div>
@@ -202,23 +293,33 @@
         <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
             <i class="fas fa-bolt mr-2" style="color: #456882;"></i>Quick Actions
         </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <a href="{{ route('projects.create') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #1B3C53, #234C6A);" onmouseover="this.style.background='linear-gradient(to right, #234C6A, #456882)'" onmouseout="this.style.background='linear-gradient(to right, #1B3C53, #234C6A)'">
                 <i class="fas fa-plus text-2xl mb-2"></i>
-                <p class="font-medium">New Project</p>
+                <p class="font-medium text-sm">New Project</p>
             </a>
             <a href="{{ route('books.create') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #234C6A, #456882);" onmouseover="this.style.background='linear-gradient(to right, #456882, #234C6A)'" onmouseout="this.style.background='linear-gradient(to right, #234C6A, #456882)'">
                 <i class="fas fa-plus text-2xl mb-2"></i>
-                <p class="font-medium">New Book</p>
+                <p class="font-medium text-sm">New Book</p>
             </a>
             <a href="{{ route('products.create') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #1B3C53, #456882);" onmouseover="this.style.background='linear-gradient(to right, #234C6A, #1B3C53)'" onmouseout="this.style.background='linear-gradient(to right, #1B3C53, #456882)'">
                 <i class="fas fa-plus text-2xl mb-2"></i>
-                <p class="font-medium">New Product</p>
+                <p class="font-medium text-sm">New Product</p>
             </a>
             <a href="{{ route('categories.create') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #456882, #234C6A);" onmouseover="this.style.background='linear-gradient(to right, #234C6A, #456882)'" onmouseout="this.style.background='linear-gradient(to right, #456882, #234C6A)'">
                 <i class="fas fa-plus text-2xl mb-2"></i>
-                <p class="font-medium">New Category</p>
+                <p class="font-medium text-sm">New Category</p>
             </a>
+            @if(isset($stats['teachers']))
+            <a href="{{ route('teachers.index') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #1B3C53, #234C6A);" onmouseover="this.style.background='linear-gradient(to right, #234C6A, #456882)'" onmouseout="this.style.background='linear-gradient(to right, #1B3C53, #234C6A)'">
+                <i class="fas fa-chalkboard-teacher text-2xl mb-2"></i>
+                <p class="font-medium text-sm">Teachers</p>
+            </a>
+            <a href="{{ route('students.index') }}" class="text-white p-4 rounded-lg text-center transition transform hover:scale-105" style="background: linear-gradient(to right, #234C6A, #456882);" onmouseover="this.style.background='linear-gradient(to right, #456882, #234C6A)'" onmouseout="this.style.background='linear-gradient(to right, #234C6A, #456882)'">
+                <i class="fas fa-user-graduate text-2xl mb-2"></i>
+                <p class="font-medium text-sm">Students</p>
+            </a>
+            @endif
         </div>
     </div>
 </div>

@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreStudentRequest extends FormRequest
+class UpdateCourseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +22,8 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [
-                'required',
-                'integer',
-                'exists:users,id',
-                Rule::unique('students', 'user_id'),
-                Rule::unique('teachers', 'user_id'),
-            ],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'teacher_id' => ['sometimes', 'required', 'integer', 'exists:teachers,id'],
         ];
     }
 
@@ -41,10 +35,12 @@ class StoreStudentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'The user field is required.',
-            'user_id.integer' => 'The user must be a valid user ID.',
-            'user_id.exists' => 'The selected user does not exist.',
-            'user_id.unique' => 'This user is already associated with a teacher or student profile.',
+            'name.required' => 'The course name field is required.',
+            'name.string' => 'The course name must be a string.',
+            'name.max' => 'The course name may not be greater than 255 characters.',
+            'teacher_id.required' => 'The teacher field is required.',
+            'teacher_id.integer' => 'The teacher must be a valid teacher ID.',
+            'teacher_id.exists' => 'The selected teacher does not exist.',
         ];
     }
 }

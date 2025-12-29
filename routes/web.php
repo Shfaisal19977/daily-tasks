@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
@@ -10,7 +11,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +22,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // User routes
 Route::get('users', [UserController::class, 'index'])->name('users.index');
+
+// School Management System routes
+Route::resource('teachers', TeacherController::class);
+Route::resource('students', StudentController::class);
+Route::resource('courses', CourseController::class);
 
 // Profile routes
 Route::prefix('profile')->name('profile.')->controller(ProfileController::class)->group(function () {

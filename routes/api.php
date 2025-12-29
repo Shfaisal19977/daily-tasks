@@ -11,6 +11,8 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTaskController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +29,8 @@ if (! defined('BOOK_ROUTE_PARAM')) {
     define('USER_ROUTE_PARAM', '/{user}');
     define('STUDENT_ROUTE_PARAM', '/{student}');
     define('MEDICAL_FILE_ROUTE_PARAM', '/{medicalFile}');
+    define('TEACHER_ROUTE_PARAM', '/{teacher}');
+    define('COURSE_ROUTE_PARAM', '/{course}');
 }
 
 // Authenticated User Routes
@@ -121,6 +125,7 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
 
 // Student API Routes (One-to-One Relationship)
 Route::controller(StudentController::class)->prefix('students')->group(function () {
+    Route::get('/', 'index');
     Route::post('/', 'store');
     Route::get(STUDENT_ROUTE_PARAM, 'show');
 });
@@ -135,3 +140,16 @@ Route::controller(MedicalFileController::class)->prefix('medical-files')->group(
 
 // Get Medical File by Student
 Route::get('/students/{student}/medical-file', [MedicalFileController::class, 'getByStudent']);
+
+// Teacher API Routes (School Management System)
+Route::controller(TeacherController::class)->prefix('teachers')->group(function () {
+    Route::get('/', 'index');
+    Route::get(TEACHER_ROUTE_PARAM . '/courses', 'getCourses');
+    Route::post(TEACHER_ROUTE_PARAM . '/courses', 'attachCourses');
+});
+
+// Course API Routes (School Management System)
+Route::controller(CourseController::class)->prefix('courses')->group(function () {
+    Route::get(COURSE_ROUTE_PARAM . '/students', 'getStudents');
+    Route::post(COURSE_ROUTE_PARAM . '/students/sync', 'syncStudents');
+});
